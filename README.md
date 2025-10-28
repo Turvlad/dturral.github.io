@@ -1,4 +1,4 @@
-Help Desk propuesta de diseño visual — v1.0
+Help Desk propuesta de diseño visual - v1.0
 
 Diseño de una interfaz moderna para el sistema de registro de actividades tipo Help Desk, enfocado en la eficiencia
 

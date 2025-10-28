@@ -33,6 +33,9 @@ Tecnologías Utilizadas
 Sitio Web (GitHub Pages):
 https://turvlad.github.io/dturral.github.io
 
+Inicio de Sesión
+para ingresar deberá rellenarse el formulario de inicio de sesión con cualquier dirección de correo y con cualquier caracter para la contraseña, ya que es un modelo de prueba no se guarda nada de información
+
 Próximos pasos
 
 Modelado de base de datos para gestión de ticket

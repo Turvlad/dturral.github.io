@@ -15,7 +15,7 @@ Este proyecto representa una fase de ideación previa al desarrollo funcional.
 
 Características del Diseño
 
--Layout responsive basado en componentes reutilizables
+-plantilla basada en componentes reutilizables
 -Jerarquía de información clara para minimizar fricción
 -Paleta institucional aplicada estratégicamente
 -Indicadores visuales de SLA y seguimiento de tickets

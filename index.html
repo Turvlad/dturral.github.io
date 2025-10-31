@@ -11,45 +11,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
   <link href="css/theme.css" rel="stylesheet">
 
-
-  <!----
-  <style>
-    :root{
-      --brand-primary:#0096AE;
-      --brand-secondary:#941B80;
-      --brand-dark:#17212b;
-    }
-    body{
-      min-height:100vh;
-      background:
-        radial-gradient(1200px 800px at 10% -10%, rgba(148,27,128,.18), transparent 40%),
-        radial-gradient(900px 600px at 110% 110%, rgba(0,150,174,.18), transparent 40%),
-        linear-gradient(180deg,#fafafa, #f1f5f9);
-    }
-    .auth-wrapper{ display:grid; grid-template-columns: 1fr; min-height:100vh; }
-    @media(min-width: 992px){ .auth-wrapper{ grid-template-columns: 1.1fr .9fr; } }
-    .brand-panel{
-      position:relative; overflow:hidden;
-      background:linear-gradient(135deg, rgba(148,27,128,.9), rgba(0,150,174,.9));
-      color:#fff;
-    }
-    .brand-panel .watermark{
-      position:absolute; inset:auto -40% -40% auto; width:640px; height:640px; opacity:.15;
-      border-radius:50%; background:#fff; filter: blur(6px);
-    }
-    .brand-badge{
-      display:inline-flex; align-items:center; gap:.5rem;
-      background: rgba(255,255,255,.16); padding:.5rem .75rem; border-radius:999px;
-      font-weight:600; letter-spacing:.3px;
-    }
-    .login-card{ max-width: 480px; }
-    .btn-brand{ background: var(--brand-secondary); border-color: var(--brand-secondary); }
-    .btn-brand:hover{ background:#7b1a6b; border-color:#7b1a6b; }
-    .link-brand{ color: var(--brand-secondary); } .link-brand:hover{ color:#7b1a6b; }
-  </style>
-
-  -->
-
 </head>
 <body>
   <main class="auth-wrapper">
@@ -86,6 +47,8 @@
 
         <div class="card shadow-sm border-0">
           <div class="card-body p-4 p-md-5">
+           <div id="LoginAlert" class="alert alert-danger d-none mb-0" role="alert"></div>
+
             <form id="loginForm" method="post" action="#" novalidate>
               <div class="mb-3">
                 <label for="username" class="form-label">Usuario o correo</label>
@@ -150,45 +113,106 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
   <script defer>
-    // Autofocus suave en primer campo
-    const form = document.getElementById('loginForm');
-    const user = document.getElementById('username');
-    const pwd  = document.getElementById('password');
-    const toggle = document.getElementById('togglePwd');
+  // --- Helpers ---
+  const qs   = (s, r = document) => r.querySelector(s);
+  const form = qs('#loginForm');
+  const user = qs('#username');
+  const pwd  = qs('#password');
+  const toggle = qs('#togglePwd');
+  const alertBox = qs('#loginAlert');
 
-    // Toggle de contraseña accesible
-    toggle.addEventListener('click', () => {
-      const isHidden = pwd.type === 'password';
-      pwd.type = isHidden ? 'text' : 'password';
-      const icon = toggle.querySelector('i');
-      icon.classList.toggle('bi-eye', !isHidden);
-      icon.classList.toggle('bi-eye-slash', isHidden);
-      toggle.setAttribute('aria-pressed', String(isHidden));
-      toggle.setAttribute('aria-label', isHidden ? 'Ocultar contraseña' : 'Mostrar contraseña');
-      pwd.focus({preventScroll:true});
-    });
+  // Decide dónde persistir según "Recordarme"
+  const storage = () => (qs('#remember')?.checked ? localStorage : sessionStorage);
 
-    // Validación y mock de envío
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      form.classList.add('was-validated');
-      if (!form.checkValidity()) return;
+  // UI helpers
+  function setLoading(isLoading) {
+    const btn = form.querySelector('button[type="submit"]');
+    [...form.elements].forEach(el => el.disabled = isLoading);
+    if (isLoading) {
+      btn.dataset._label = btn.innerHTML;
+      btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Entrando…`;
+    } else {
+      if (btn.dataset._label) btn.innerHTML = btn.dataset._label;
+    }
+  }
+  function showError(msg) {
+    if (!alertBox) return alert(msg);
+    alertBox.textContent = msg || 'Error al iniciar sesión';
+    alertBox.classList.remove('d-none');
+  }
+  function clearError() {
+    alertBox?.classList.add('d-none');
+  }
 
-      // TODO: reemplazar por fetch a tu endpoint real
-      // fetch('/auth/login', { method:'POST', body: new FormData(form) })
-      //   .then(r => r.ok ? location.href = '2_home.html' : ...)
+  // Toggle de contraseña accesible
+  toggle.addEventListener('click', () => {
+    const isHidden = pwd.type === 'password';
+    pwd.type = isHidden ? 'text' : 'password';
+    const icon = toggle.querySelector('i');
+    icon.classList.toggle('bi-eye', !isHidden);
+    icon.classList.toggle('bi-eye-slash', isHidden);
+    toggle.setAttribute('aria-pressed', String(isHidden));
+    toggle.setAttribute('aria-label', isHidden ? 'Ocultar contraseña' : 'Mostrar contraseña');
+    pwd.focus({ preventScroll:true });
+  });
 
-      // Navegación mock
+  // Submit real -> /api/auth/login
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearError();
+    form.classList.add('was-validated');
+    if (!form.checkValidity()) return;
+
+    const email = user.value.trim();
+    const password = pwd.value.trim();
+
+    setLoading(true);
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      // Intenta parsear JSON siempre (aunque venga error con payload)
+      const payload = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        // 401/400/etc.
+        showError(payload.error || 'Credenciales inválidas');
+        return;
+      }
+
+      // Esperamos: { token, user:{ email, role } }
+      const { token, user: userInfo } = payload || {};
+      if (!token || !userInfo) {
+        showError('Respuesta del servidor incompleta');
+        return;
+      }
+
+      // Persistencia según "Recordarme"
+      const store = storage();
+      store.setItem('helpdesk_token', token);
+      store.setItem('helpdesk_user', JSON.stringify(userInfo));
+
+      // Redirección post login
       window.location.href = '2_home.html';
-    });
+    } catch (err) {
+      console.error(err);
+      showError('No se pudo conectar con el servidor');
+    } finally {
+      setLoading(false);
+    }
+  });
 
-    // UX: marcar campo inválido hasta que el usuario lo toque
-    form.querySelectorAll('input[required]').forEach(inp => {
-      inp.addEventListener('input', () => inp.classList.remove('is-invalid'), { once:true });
-    });
+  // UX: limpiar invalid al escribir por primera vez
+  form.querySelectorAll('input[required]').forEach(inp => {
+    inp.addEventListener('input', () => inp.classList.remove('is-invalid'), { once:true });
+  });
 
-    // Foco inicial
-    window.requestAnimationFrame(() => user && user.focus({preventScroll:true}));
-  </script>
+  // Foco inicial
+  window.requestAnimationFrame(() => user && user.focus({ preventScroll:true }));
+</script>
 </body>
 </html>
+

@@ -1,33 +1,34 @@
+// api/auth/login.ts (o el archivo donde tengas el handler)
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import jwt from 'jsonwebtoken';
-import cookie from 'cookie';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-in-vercel';
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret';
 
-type Role = 'admin' | 'user';
+// Define admins “de verdad”
+const ADMIN_EMAILS = new Set([
+  'metepec_ventas29@qualitas.com.mx',
+  'metepec_ventas20@qualitas.com.mx',
+]);
 
-const USERS: Record<string, { password: string; role: Role; name: string }> = {
-  'admin@qualitas.com': { password: 'admin123', role: 'admin', name: 'Admin QA' },
-  'user@qualitas.com':  { password: 'user123',  role: 'user',  name: 'User QA' },
-};
-
-export default function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') return res.status(405).end();
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { email, password } = req.body || {};
-  const u = USERS[email as string];
-  if (!u || u.password !== password) {
-    return res.status(401).json({ ok: false, error: 'Credenciales inválidas' });
-  }
+  if (!email || !password) return res.status(400).json({ error: 'Faltan credenciales' });
 
-  const token = jwt.sign({ sub: email, role: u.role, name: u.name }, JWT_SECRET, { expiresIn: '1d' });
-  res.setHeader('Set-Cookie', cookie.serialize('auth', token, {
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: true,           // en prod sobre HTTPS
-    path: '/',
-    maxAge: 60 * 60 * 24,   // 1 día
-  }));
+  // Demo: password fijo
+  if (password !== 'demo1234') return res.status(401).json({ error: 'Credenciales inválidas' });
 
-  return res.status(200).json({ ok: true });
+  const role = ADMIN_EMAILS.has(String(email).toLowerCase()) ? 'admin' : 'user';
+
+  const token = jwt.sign(
+    { sub: email, role },
+    JWT_SECRET,
+    { expiresIn: '8h' }
+  );
+
+  return res.status(200).json({
+    token,
+    user: { email, role }
+  });
 }

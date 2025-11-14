@@ -15,7 +15,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
       rel="stylesheet"
     />
-    <link href="assets/css/theme.css" rel="stylesheet" />
+    <link href="../assets/css/theme.css" rel="stylesheet" />
   </head>
 
   <body>
@@ -108,7 +108,7 @@
               >
               <span class="text-muted small" data-usuario-rol>Rol</span>
               <img
-                src="https://via.placeholder.com/36"
+                src="https://placeholdmon.vercel.app/"
                 class="rounded-circle"
                 alt="Avatar de Vladimir"
                 width="36"
@@ -129,23 +129,23 @@
               class="card-body d-flex flex-wrap justify-content-between align-items-center gap-3"
             >
               <div>
-                <h2 class="h4 mb-1" id="activity-id">ACT-2025-001238</h2>
+                <h2 class="h4 mb-1" id="activity-id">20251111-1216-SER</h2>
                 <div class="d-flex flex-wrap gap-2">
-                  <span class="badge bg-success">Finalizado</span>
+                  <span class="badge bg-success">estatus</span>
                   <span class="meta-chip"
                     ><i class="bi bi-person me-1" aria-hidden="true"></i>
-                    Colaborador: Vladimir Turral</span
-                  >
+                    Colaborador: Usuario con sesión iniciada
+                  </span>
                   <span class="meta-chip"
                     ><i
                       class="bi bi-calendar-event me-1"
                       aria-hidden="true"
                     ></i>
-                    21/10/2025</span
+                    dd/mm/aaaa</span
                   >
                   <span class="meta-chip"
                     ><i class="bi bi-geo-alt me-1" aria-hidden="true"></i> Área
-                    destino: AOF</span
+                    destino: Área a la que se envía</span
                   >
                 </div>
               </div>
@@ -186,14 +186,14 @@
               <div
                 class="card shadow-sm card-hover"
                 role="group"
-                aria-label="Tiempo a enviar al área 01:32 h estado OK"
+                aria-label="Tiempo a enviar al área hh:mm h estado OK"
               >
                 <div
                   class="card-body d-flex align-items-center justify-content-between"
                 >
                   <div>
                     <div class="text-muted small">Tiempo a enviar al área</div>
-                    <div class="h4 mb-0">01:32 h</div>
+                    <div class="h4 mb-0" data-kpi="t-env-area">hh:mm h</div>
                   </div>
                   <span class="badge bg-info text-dark">OK</span>
                 </div>
@@ -203,7 +203,7 @@
               <div
                 class="card shadow-sm card-hover"
                 role="group"
-                aria-label="Tiempo respuesta del área 03:18 h dentro SLA"
+                aria-label="Tiempo respuesta del área hh:mm h dentro SLA"
               >
                 <div
                   class="card-body d-flex align-items-center justify-content-between"
@@ -212,7 +212,7 @@
                     <div class="text-muted small">
                       Tiempo respuesta del área
                     </div>
-                    <div class="h4 mb-0">03:18 h</div>
+                    <div class="h4 mb-0" data-kpi="t-resp-area">hh:mm h</div>
                   </div>
                   <span class="badge bg-success">Dentro SLA</span>
                 </div>
@@ -222,7 +222,7 @@
               <div
                 class="card shadow-sm card-hover"
                 role="group"
-                aria-label="Tiempo respuesta al agente 00:47 h requiere atención"
+                aria-label="Tiempo respuesta al agente hh:mm h requiere atención"
               >
                 <div
                   class="card-body d-flex align-items-center justify-content-between"
@@ -231,7 +231,7 @@
                     <div class="text-muted small">
                       Tiempo respuesta al agente
                     </div>
-                    <div class="h4 mb-0">00:47 h</div>
+                    <div class="h4 mb-0" data-kpi="t-resp-agente">hh:mm h</div>
                   </div>
                   <span class="badge bg-warning text-dark">Atención</span>
                 </div>
@@ -303,29 +303,30 @@
                       <div class="row g-3">
                         <div class="col-6">
                           <div class="text-muted small">Colaborador</div>
-                          <div>Vladimir Turral</div>
+                          <div data-field="colaborador">Vladimir Turral</div>
                         </div>
                         <div class="col-3">
                           <div class="text-muted small">Fecha</div>
-                          <div>21/10/2025</div>
+                          <div data-field="recepcion-fecha">dd/mm/aa</div>
                         </div>
                         <div class="col-3">
                           <div class="text-muted small">Hora recepción</div>
-                          <div>10:14</div>
+                          <div data-field="recepcion-hora">hh:mm</div>
                         </div>
                         <div class="col-4">
                           <div class="text-muted small">Agente Clave</div>
-                          <div>88200</div>
+                          <div data-field="recepcion-agente">00000</div>
                         </div>
                         <div class="col-8">
                           <div class="text-muted small">Asunto</div>
-                          <div>Renovación póliza flotilla Q3</div>
+                          <div data-field="recepcion-asunto">
+                            Renovación póliza flotilla Q3
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
                 <div class="col-lg-6">
                   <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white fw-semibold">
@@ -335,27 +336,31 @@
                       <div class="row g-3">
                         <div class="col-6">
                           <div class="text-muted small">Forma de Solicitud</div>
-                          <div>E-mail</div>
+                          <div data-field="forma-solicitud">E-mail</div>
                         </div>
                         <div class="col-6">
                           <div class="text-muted small">Tipo de Solicitud</div>
-                          <div>Renovación</div>
+                          <div data-field="tipo-solicitud">Renovación</div>
                         </div>
                         <div class="col-6">
                           <div class="text-muted small">Enviado al Área</div>
-                          <div>AOF</div>
+                          <div data-field="area-destino">AOF</div>
                         </div>
                         <div class="col-6">
                           <div class="text-muted small">Estatus</div>
                           <div>
-                            <span class="badge bg-success">Finalizado</span>
+                            <span
+                              class="badge bg-success"
+                              data-field="estatus-badge"
+                            >
+                              Finalizado
+                            </span>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
                 <div class="col-lg-6">
                   <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white fw-semibold">
@@ -365,25 +370,24 @@
                       <div class="row g-3">
                         <div class="col-6">
                           <div class="text-muted small">Envío al Área</div>
-                          <div>21/10/2025 — 11:46</div>
+                          <div data-field="envio-area">dd/mm/AA — HH:mm</div>
                         </div>
                         <div class="col-6">
                           <div class="text-muted small">Respuesta del Área</div>
-                          <div>21/10/2025 — 15:04</div>
+                          <div data-field="resp-area">dd/mm/AA — HH:mm</div>
                         </div>
                         <div class="col-6">
                           <div class="text-muted small">Envío al Agente</div>
-                          <div>21/10/2025 — 15:51</div>
+                          <div data-field="envio-agente">dd/mm/AA — HH:mm</div>
                         </div>
                         <div class="col-6">
                           <div class="text-muted small">Tiempo total</div>
-                          <div>05:37 h</div>
+                          <div data-field="tiempo-total">HH:mm h</div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
                 <div class="col-lg-6">
                   <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white fw-semibold">
@@ -393,17 +397,17 @@
                       <div class="row g-3">
                         <div class="col-6">
                           <div class="text-muted small">Póliza a Renovar</div>
-                          <div>Q-PLZ-2024-7781</div>
+                          <div data-field="poliza-renovar">0000000000</div>
                         </div>
                         <div class="col-6">
                           <div class="text-muted small">Póliza Renovada</div>
-                          <div>Q-PLZ-2025-8892</div>
+                          <div data-field="poliza-renovada">0000000000</div>
                         </div>
                         <div class="col-12">
                           <div class="text-muted small">
                             Comentarios Renovación
                           </div>
-                          <div>
+                          <div data-field="comentarios-renovacion">
                             Se actualizó prima y se mantuvieron coberturas. Sin
                             incidencias.
                           </div>
@@ -412,14 +416,13 @@
                     </div>
                   </div>
                 </div>
-
                 <div class="col-12">
                   <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white fw-semibold">
                       Comentarios
                     </div>
                     <div class="card-body">
-                      <p class="mb-0">
+                      <p class="mb-0" data-field="comentarios">
                         Cliente solicitó confirmación telefónica posterior al
                         envío de documentación.
                       </p>
@@ -654,7 +657,7 @@ Se actualizó prima y se mantuvieron coberturas.</textarea
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/app.js"></script>
+    <script src="../assets/js/app.js"></script>
     <!-- Router SPA (intacto) + micro handlers -->
     <script defer>
       (function () {
@@ -789,6 +792,301 @@ Se actualizó prima y se mantuvieron coberturas.</textarea
         });
       })();
     </script>
+
+    <script data-init>
+      document.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
+
+        if (!id) return;
+
+        let actividades = [];
+        try {
+          actividades = JSON.parse(
+            localStorage.getItem("hd_actividades") || "[]"
+          );
+        } catch (e) {
+          console.error("No se pudo leer hd_actividades", e);
+          return;
+        }
+
+        const actividad = actividades.find((a) => String(a.id) === String(id));
+        if (!actividad) {
+          console.warn("Actividad no encontrada para id", id);
+          return;
+        }
+
+        // Helpers simples
+        const formatDateDMY = (ymd) => {
+          if (!ymd) return "—";
+          const [y, m, d] = ymd.split("-");
+          if (!y || !m || !d) return ymd;
+          return `${d}/${m}/${y}`;
+        };
+
+        const formatDateTime = (fecha, hora) => {
+          if (!fecha && !hora) return "—";
+          const d = fecha ? formatDateDMY(fecha) : "—";
+          const h = hora || "—";
+          return `${d} — ${h}`;
+        };
+
+        const formatTiempo = (mins) =>{
+          if (mins==null || isNaN(mins)) return "--";
+          const total = Math.max(0, Number(mins));
+          const h = Math.floor(total/60);
+          const m = total % 60;
+          const hh = String(h).padStart(2,"0");
+          const mm = String(m).padStart(2,"0");
+          return `${hh}:${mm} h`;
+        };
+
+        const parseDT = (fecha, hora) => {
+          if (!fecha || !hora) return null;
+          // El formato esperado es "2025-10-21T15:05"
+          return new Date(`${fecha}T${hora}`); // Usa backticks (``)
+        };
+
+        const buildStatusBadge = (estatus) => {
+          const s = (estatus || "").toLowerCase();
+          if (s.includes("final")) {
+            return '<span class="badge bg-success">Finalizado</span>';
+          }
+          if (s.includes("curso")) {
+            return '<span class="badge bg-warning text-dark">En curso</span>';
+          }
+          if (s.includes("área") || s.includes("area")) {
+            return '<span class="badge bg-secondary">Enviado a área</span>';
+          }
+          if (s.includes("pend")) {
+            return '<span class="badge bg-secondary">Pendiente</span>';
+          }
+          return `<span class="badge bg-secondary">${estatus || "—"}</span>`;
+        };
+
+        const colaborador =
+          actividad.colaborador ||
+          actividad.usuarioNombre ||
+          actividad.usuarioRegistro ||
+          "—";
+
+        const fechaRecep =
+          actividad.fechaRecepcion || actividad.fechaRegistro || null;
+        const horaRecep = actividad.horaRecepcion || null;
+        const area = actividad.areaDestino || "—";
+        const formaSolicitud = actividad.formaSolicitud || "—";
+        const tipoSolicitud =
+          actividad.tipoSolicitud || actividad.tipoActividad || "—";
+        const estatus = actividad.estatus || "—";
+
+        // ===== Encabezado principal =====
+        const hdrId = document.getElementById("activity-id");
+        if (hdrId) {
+          const folio = actividad.folio || actividad.id;
+          hdrId.textContent = `Actividad ${actividad.id}`;
+        }
+
+        const headerSection = document.querySelector(
+          'section[aria-labelledby="activity-id"]'
+        );
+        if (headerSection) {
+          const chips = headerSection.querySelectorAll(".meta-chip");
+          const [chipColab, chipFecha, chipArea] = chips;
+
+          if (chipColab) {
+            chipColab.innerHTML = `
+          <i class="bi bi-person me-1" aria-hidden="true"></i>
+          Colaborador: ${colaborador}
+        `;
+          }
+
+          if (chipFecha) {
+            chipFecha.innerHTML = `
+          <i class="bi bi-calendar-event me-1" aria-hidden="true"></i>
+          ${formatDateDMY(fechaRecep)}
+        `;
+          }
+
+          if (chipArea) {
+            chipArea.innerHTML = `
+          <i class="bi bi-geo-alt me-1" aria-hidden="true"></i>
+          Área destino: ${area}
+        `;
+          }
+
+          const badgeContainer = headerSection.querySelector(".badge");
+          if (badgeContainer) {
+            badgeContainer.outerHTML = buildStatusBadge(estatus);
+          }
+        }
+
+        // ===== Tab Resumen =====
+        const resumenRoot = document.getElementById("resumen");
+        if (resumenRoot) {
+          // Datos Generales
+          const colabEl = resumenRoot.querySelector(
+            "[data-field='colaborador']"
+          );
+          const recFecha = resumenRoot.querySelector(
+            "[data-field='recepcion-fecha']"
+          );
+          const recHora = resumenRoot.querySelector(
+            "[data-field='recepcion-hora']"
+          );
+          const recAgente = resumenRoot.querySelector(
+            "[data-field='recepcion-agente']"
+          );
+          const recAsunto = resumenRoot.querySelector(
+            "[data-field='recepcion-asunto']"
+          );
+
+          if (colabEl) colabEl.textContent = colaborador;
+          if (recFecha) recFecha.textContent = formatDateDMY(fechaRecep);
+          if (recHora) recHora.textContent = horaRecep || "—";
+          if (recAgente) recAgente.textContent = actividad.agenteClave || "—";
+          if (recAsunto) recAsunto.textContent = tipoSolicitud;
+
+          // Solicitud
+          const formaEl = resumenRoot.querySelector(
+            "[data-field='forma-solicitud']"
+          );
+          const tipoEl = resumenRoot.querySelector(
+            "[data-field='tipo-solicitud']"
+          );
+          const areaDestEl = resumenRoot.querySelector(
+            "[data-field='area-destino']"
+          );
+          const estatusBadgeEl = resumenRoot.querySelector(
+            "[data-field='estatus-badge']"
+          );
+
+          if (formaEl) formaEl.textContent = formaSolicitud;
+          if (tipoEl) tipoEl.textContent = tipoSolicitud;
+          if (areaDestEl) areaDestEl.textContent = area;
+          if (estatusBadgeEl) {
+            estatusBadgeEl.outerHTML = buildStatusBadge(estatus);
+          }
+
+          // Fechas / tiempos
+          const envioAreaEl = resumenRoot.querySelector(
+            "[data-field='envio-area']"
+          );
+          const respAreaEl = resumenRoot.querySelector(
+            "[data-field='resp-area']"
+          );
+          const envioAgenteEl = resumenRoot.querySelector(
+            "[data-field='envio-agente']"
+          );
+          const tiempoTotalEl = resumenRoot.querySelector(
+            "[data-field='tiempo-total']"
+          );
+
+          if (envioAreaEl) {
+            envioAreaEl.textContent = formatDateTime(
+              actividad.fechaEnvioArea,
+              actividad.horaEnvioArea
+            );
+          }
+          if (respAreaEl) {
+            respAreaEl.textContent = formatDateTime(
+              actividad.fechaRespArea,
+              actividad.horaRespArea
+            );
+          }
+          if (envioAgenteEl) {
+            envioAgenteEl.textContent = formatDateTime(
+              actividad.fechaEnvioAgente,
+              actividad.horaEnvioAgente
+            );
+          }
+          if (tiempoTotalEl) {
+            tiempoTotalEl.textContent = formatTiempo(actividad.tiempoTotalMin);
+          }
+
+          // Renovación (por ahora usamos los campos que tengas; si luego agregas más, solo los mapearíamos)
+          const polRenEl = resumenRoot.querySelector(
+            "[data-field='poliza-renovar']"
+          );
+          const polRen2El = resumenRoot.querySelector(
+            "[data-field='poliza-renovada']"
+          );
+          const comentRenEl = resumenRoot.querySelector(
+            "[data-field='comentarios-renovacion']"
+          );
+
+          if (polRenEl) polRenEl.textContent = actividad.polizaOriginal || "—";
+          if (polRen2El)
+            polRen2El.textContent = actividad.polizaRenovada || "—";
+          if (comentRenEl)
+            comentRenEl.textContent = actividad.comentariosRenovacion || "—";
+
+          // Comentarios generales
+          const comentariosEl = resumenRoot.querySelector(
+            "[data-field='comentarios']"
+          );
+          if (comentariosEl) {
+            comentariosEl.textContent = actividad.comentarios || "—";
+          }
+        }
+
+        // ========= KPIs rapidos de tiempos
+
+        // ===== KPIs rápidos de tiempos =====
+        const kpiEnvAreaEl = document.querySelector("[data-kpi='t-env-area']");
+        const kpiRespAreaEl = document.querySelector(
+          "[data-kpi='t-resp-area']"
+        );
+        const kpiRespAgenteEl = document.querySelector(
+          "[data-kpi='t-resp-agente']"
+        );
+
+        const dtRec = parseDT(
+          actividad.fechaRecepcion || actividad.fechaRegistro,
+          actividad.horaRecepcion || actividad.horaRegistro
+        );
+        const dtEnvArea = parseDT(
+          actividad.fechaEnvioArea,
+          actividad.horaEnvioArea
+        );
+        const dtRespArea = parseDT(
+          actividad.fechaRespArea,
+          actividad.horaRespArea
+        );
+        const dtEnvAgente = parseDT(
+          actividad.fechaEnvioAgente,
+          actividad.horaEnvioAgente
+        );
+
+        // Tiempo a enviar al área = recepción → envío área
+        if (kpiEnvAreaEl && dtRec && dtEnvArea && dtEnvArea > dtRec) {
+          const mins = Math.round((dtEnvArea - dtRec) / 60000);
+          kpiEnvAreaEl.textContent = formatTiempo(mins);
+        } else if (kpiEnvAreaEl) {
+          kpiEnvAreaEl.textContent = "—";
+        }
+
+        // Tiempo respuesta del área = envío área → respuesta área
+        if (
+          kpiRespAreaEl &&
+          dtEnvArea &&
+          dtRespArea &&
+          dtRespArea > dtEnvArea
+        ) {
+          const mins = Math.round((dtRespArea - dtEnvArea) / 60000);
+          kpiRespAreaEl.textContent = formatTiempo(mins);
+        } else if (kpiRespAreaEl) {
+          kpiRespAreaEl.textContent = "—";
+        }
+
+        // Tiempo respuesta al agente = recepción → envío al agente
+        if (kpiRespAgenteEl && dtRec && dtEnvAgente && dtEnvAgente > dtRec) {
+          const mins = Math.round((dtEnvAgente - dtRec) / 60000);
+          kpiRespAgenteEl.textContent = formatTiempo(mins);
+        } else if (kpiRespAgenteEl) {
+          kpiRespAgenteEl.textContent = "—";
+        }
+        // TODO: futuro → llenar también el tab de Flujo y la tabla de Auditoría desde el mismo objeto
+      });
+    </script>
   </body>
 </html>
-

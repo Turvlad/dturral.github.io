@@ -14,7 +14,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
       rel="stylesheet"
     />
-    <link href="assets/css/theme.css" rel="stylesheet" />
+    <link href="../assets/css/theme.css" rel="stylesheet" />
   </head>
   <body>
     <div class="app-shell d-flex">
@@ -166,6 +166,46 @@
 
             <!-- FORM SECTIONS (wizard) -->
             <form id="wizardForm" novalidate>
+              <!-- header de navegación -->
+              <div
+                class="sticky-footer d-flex justify-content-between align-items-center"
+              >
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  id="btnPrev"
+                  aria-label="Ir al paso anterior"
+                >
+                  <i class="bi bi-arrow-left-short me-1" aria-hidden="true"></i
+                  >Atrás
+                </button>
+                <div class="d-flex align-items-center gap-2">
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    id="btnSave"
+                  >
+                    <i class="bi bi-cloud-arrow-up me-1" aria-hidden="true"></i
+                    >Guardar borrador
+                  </button>
+                  <button type="button" class="btn btn-brand" id="btnNext">
+                    Siguiente
+                    <i
+                      class="bi bi-arrow-right-short ms-1"
+                      aria-hidden="true"
+                    ></i>
+                  </button>
+                  <button
+                    type="submit"
+                    class="btn btn-success d-none"
+                    id="btnSubmit"
+                  >
+                    <i class="bi bi-send-check me-1" aria-hidden="true"></i
+                    >Enviar
+                  </button>
+                </div>
+              </div>
+
               <!-- Paso 1: Recepción -->
               <section
                 class="card border-0 shadow-sm card-section mb-3"
@@ -297,11 +337,19 @@
                         name="enviado_area"
                       >
                         <option value="" selected disabled>Selecciona</option>
-                        <option value="AOF">AOF</option>
-                        <option value="Caja Metepec">Caja Metepec</option>
-                        <option value="Control de Calidad">
-                          Control de Calidad
-                        </option>
+                        <option value="AOF">AOF</option>		
+                        <option value="Caja Metepec">Caja Metepec	</option>	
+                        <option value="Caja San Jerónimo">Caja San Jerónimo	</option>	
+                        <option value="OTRS Suscripción Individual">OTRS Suscripción Individual	</option>	
+                        <option value="OTRS Valores Convenidos">OTRS Valores Convenidos</option>		
+                        <option value="Plataforma CRM"	>Plataforma CRM</option>	
+                        <option value="Devoluciones (Milka)">	Devoluciones (Milka)</option>	
+                        <option value="Control de agentes">Control de agentes</option>
+                        <option value="Devoluciones OPL">Devoluciones OPL</option>
+                        <option value="OTR tarifas">OTR tarifas</option>
+                        <option value="Claudia Vázquez (BP)">Claudia Vázquez (BP)</option>	
+                        <option value="Cuentas Coorporativas (multianuales)">Cuentas Coorporativas (multianuales)</option>
+                        <option value="Suscripción flotillas"	>Suscripción flotillas</option>
                       </select>
                     </div>
 
@@ -386,6 +434,7 @@
                         <option value="Enviado a área">Enviado a área</option>
                       </select>
                     </div>
+
                     <div class="col-md-4">
                       <label class="form-label" for="f-fseg"
                         >Fecha de Seguimiento</label
@@ -474,45 +523,6 @@
                 </div>
               </section>
 
-              <!-- Footer de navegación -->
-              <div
-                class="sticky-footer d-flex justify-content-between align-items-center"
-              >
-                <button
-                  type="button"
-                  class="btn btn-outline-secondary"
-                  id="btnPrev"
-                  aria-label="Ir al paso anterior"
-                >
-                  <i class="bi bi-arrow-left-short me-1" aria-hidden="true"></i
-                  >Atrás
-                </button>
-                <div class="d-flex align-items-center gap-2">
-                  <button
-                    type="button"
-                    class="btn btn-outline-primary"
-                    id="btnSave"
-                  >
-                    <i class="bi bi-cloud-arrow-up me-1" aria-hidden="true"></i
-                    >Guardar borrador
-                  </button>
-                  <button type="button" class="btn btn-brand" id="btnNext">
-                    Siguiente
-                    <i
-                      class="bi bi-arrow-right-short ms-1"
-                      aria-hidden="true"
-                    ></i>
-                  </button>
-                  <button
-                    type="submit"
-                    class="btn btn-success d-none"
-                    id="btnSubmit"
-                  >
-                    <i class="bi bi-send-check me-1" aria-hidden="true"></i
-                    >Enviar
-                  </button>
-                </div>
-              </div>
             </form>
           </div>
 
@@ -565,7 +575,7 @@
                     class="form-control"
                     id="ren_poliza_anterior"
                     name="ren_poliza_anterior"
-                    placeholder="Q-PLZ-2024-7781"
+                    placeholder="0000000000"
                     required
                   />
                 </div>
@@ -577,7 +587,7 @@
                     class="form-control"
                     id="ren_poliza_nueva"
                     name="ren_poliza_nueva"
-                    placeholder="Q-PLZ-2025-8892"
+                    placeholder="0000000000"
                     required
                   />
                 </div>
@@ -619,529 +629,146 @@
       crossorigin="anonymous"
       defer
     ></script>
-    <script src="assets/js/app.js"></script>
+    <script src="../assets/js/app.js"></script>
 
     <!-- Wizard + lógica de página -->
+
     <script data-init>
-      // ====== WIZARD (Registro general) ======
-      const form = document.getElementById("wizardForm");
-      const sections = form
-        ? [...document.querySelectorAll("#pane-general section[data-step]")]
-        : [];
-      const steps = form
-        ? [...document.querySelectorAll("#pane-general .stepper .step")]
-        : [];
+      document.addEventListener("DOMContentLoaded", () => {
+        // ====== WIZARD (Registro general) ======
+        const form = document.getElementById("wizardForm");
+        const sections = form
+          ? [...document.querySelectorAll("#pane-general section[data-step]")]
+          : [];
+        const steps = form
+          ? [...document.querySelectorAll("#pane-general .stepper .step")]
+          : [];
+        const urlParams = new URLSearchParams(window.location.search);
+        const editIdParam = urlParams.get("id");
+        const usuarioStrGlobal = localStorage.getItem("hd_usuario");
+        const esAdmin = window.hdIsAdmin === true;
 
-      // ----- Referencias para agente -----
-      const agenteInput = document.getElementById("f-agente");
-      const agenteInfo = document.getElementById("agente-info");
-      const agenteError = document.getElementById("agente-error");
 
-      // Catálogo temporal de agentes (simula la "base de datos")
-      const CATALOGO_AGENTES = [
-        { clave: "88200", nombre: "Agente 88200 Hylant" },
-        { clave: "88201", nombre: "Agente 88201 Hylant 2" },
-        { clave: "09005", nombre: "09005 Ventas Mostrador" },
-      ];
 
-      function buscarAgentePorClave(clave) {
-        if (!clave) return null;
-        return CATALOGO_AGENTES.find((a) => a.clave === clave) || null;
-      }
+        const agenteInput = document.getElementById("f-agente");
+        const agenteInfo = document.getElementById("agente-info");
+        const agenteError = document.getElementById("agente-error");
 
-      const btnPrev = document.getElementById("btnPrev");
-      const btnNext = document.getElementById("btnNext");
-      const btnSubmit = document.getElementById("btnSubmit");
-      const btnSave = document.getElementById("btnSave");
-      const resume = document.getElementById("resume");
-      let current = 1;
+        const btnPrev = document.getElementById("btnPrev");
+        const btnNext = document.getElementById("btnNext");
+        const btnSubmit = document.getElementById("btnSubmit");
+        const btnSave = document.getElementById("btnSave");
+        const resume = document.getElementById("resume");
+        let current = 1;
 
-      // ====== Campos de horarios ======
-      const fechaEnvioArea = form ? form.elements["fecha_envio_area"] : null;
-      const horaEnvioArea = form ? form.elements["hora_envio_area"] : null;
-      const fechaEnvioAgente = form
-        ? form.elements["fecha_envio_agente"]
-        : null;
-      const horaEnvioAgente = form ? form.elements["hora_envio_agente"] : null;
+        // 🔹 Catálogo temporal de agentes (mock)
+        const CATALOGO_AGENTES = [
+          { clave: "88200", nombre: "Agente 88200 Hylant" },
+          { clave: "88201", nombre: "Agente 88201 Hylant 2" },
+          { clave: "09005", nombre: "09005 Ventas Mostrador" },
+        ];
 
-      const errorHoraEnvioArea = document.getElementById(
-        "error-hora-envio-area"
-      );
-      const errorHoraEnvioAgente = document.getElementById(
-        "error-hora-envio-agente"
-      );
-
-      // ====== Horario laboral: lunes a viernes 08:30 a 18:30 ======
-      function esHorarioLaboral(fechaStr, horaStr) {
-        if (!fechaStr || !horaStr) return true;
-        const dt = new Date(`${fechaStr}T${horaStr}`);
-        if (Number.isNaN(dt.getTime())) return true;
-        const day = dt.getDay(); // 0 = domingo, 6 = sábado
-        if (day === 0 || day === 6) return false;
-        const minutes = dt.getHours() * 60 + dt.getMinutes();
-        const start = 8 * 60 + 30; // 08:30
-        const end = 18 * 60 + 30; // 18:30
-        return minutes >= start && minutes <= end;
-      }
-
-      function validarHoraEnvioArea() {
-        if (!horaEnvioArea || !fechaEnvioArea) return true;
-        const f = fechaEnvioArea.value;
-        const h = horaEnvioArea.value;
-
-        if (!f || !h) {
-          horaEnvioArea.classList.remove("is-invalid");
-          if (errorHoraEnvioArea) errorHoraEnvioArea.textContent = "";
-          return true;
+        function buscarAgentePorClave(clave) {
+          if (!clave) return null;
+          return CATALOGO_AGENTES.find((a) => a.clave === clave) || null;
         }
 
-        const ok = esHorarioLaboral(f, h);
-        if (!ok) {
-          horaEnvioArea.classList.add("is-invalid");
-          if (errorHoraEnvioArea) {
-            errorHoraEnvioArea.textContent =
-              "Debe estar en horario laboral: lunes a viernes de 08:30 a 18:30.";
-          }
-        } else {
-          horaEnvioArea.classList.remove("is-invalid");
-          if (errorHoraEnvioArea) errorHoraEnvioArea.textContent = "";
-        }
-        return ok;
-      }
-
-      function validarHoraEnvioAgente() {
-        if (!horaEnvioAgente || !fechaEnvioAgente) return true;
-        const f = fechaEnvioAgente.value;
-        const h = horaEnvioAgente.value;
-
-        if (!f || !h) {
-          horaEnvioAgente.classList.remove("is-invalid");
-          if (errorHoraEnvioAgente) errorHoraEnvioAgente.textContent = "";
-          return true;
+        function limpiarErroresAgente() {
+          if (agenteInput) agenteInput.classList.remove("is-invalid");
+          if (agenteError) agenteError.textContent = "";
         }
 
-        const ok = esHorarioLaboral(f, h);
-        if (!ok) {
-          horaEnvioAgente.classList.add("is-invalid");
-          if (errorHoraEnvioAgente) {
-            errorHoraEnvioAgente.textContent =
-              "Debe estar en horario laboral: lunes a viernes de 08:30 a 18:30.";
-          }
-        } else {
-          horaEnvioAgente.classList.remove("is-invalid");
-          if (errorHoraEnvioAgente) errorHoraEnvioAgente.textContent = "";
-        }
-        return ok;
-      }
+        // ===== Autollenar colaborador + fecha/hora en NUEVOS registros =====
 
-      // Autollenar colaborador + fecha/hora recepción
-      // --- Función para autollenar colaborador + fecha/hora con el usuario logueado ---
-      function initCabecera() {
-        const usuarioStr = localStorage.getItem("hd_usuario");
-        // 👇 Todos los inputs "colaborador" (Registro general + Renovaciones)
-        const colabInputs = document.querySelectorAll(
-          'input[name="colaborador"]'
-        );
-        const fechaInput = document.getElementById("f-fecha");
-        const horaRecInput = document.getElementById("f-hrec");
+        if (!editIdParam && form) {
+          const colabInput = document.getElementById("f-colaborador");
+          const fechaInput = document.getElementById("f-fecha");
+          const horaRecInput = document.getElementById("f-hrec");
 
-        // Colaborador desde el login
-        if (usuarioStr && colabInputs.length) {
-          try {
-            const u = JSON.parse(usuarioStr);
-            const nombre = u.nombre || u.username || "";
-            if (nombre) {
-              colabInputs.forEach((input) => {
-                input.value = nombre;
-                input.readOnly = true;
-                input.classList.add("bg-light", "text-muted");
-              });
-            }
-          } catch (e) {
-            console.error("No se pudo parsear hd_usuario", e);
-          }
-        }
-
-        // Fecha y hora de recepción por defecto = ahora (solo aplica al wizard)
-        const now = new Date();
-        const pad = (n) => String(n).padStart(2, "0");
-        const yyyy = now.getFullYear();
-        const mm = pad(now.getMonth() + 1);
-        const dd = pad(now.getDate());
-        const hh = pad(now.getHours());
-        const mi = pad(now.getMinutes());
-        const fechaHoy = `${yyyy}-${mm}-${dd}`;
-        const horaAhora = `${hh}:${mi}`;
-
-        if (fechaInput) {
-          fechaInput.value = fechaHoy;
-        }
-        if (horaRecInput) {
-          horaRecInput.value = horaAhora;
-        }
-      }
-
-      // Autollenar envío al agente al entrar al paso 3 (si están vacíos)
-      function autoFillEnvioAgenteAlEntrar() {
-        if (!fechaEnvioAgente || !horaEnvioAgente) return;
-
-        const now = new Date();
-        const pad = (n) => String(n).padStart(2, "0");
-
-        const yyyy = now.getFullYear();
-        const mm = pad(now.getMonth() + 1);
-        const dd = pad(now.getDate());
-        const hh = pad(now.getHours());
-        const mi = pad(now.getMinutes());
-
-        const fechaHoy = `${yyyy}-${mm}-${dd}`;
-        const horaAhora = `${hh}:${mi}`;
-
-        if (!fechaEnvioAgente.value) {
-          fechaEnvioAgente.value = fechaHoy;
-        }
-        if (!horaEnvioAgente.value) {
-          horaEnvioAgente.value = horaAhora;
-        }
-
-        validarHoraEnvioAgente();
-      }
-
-      initCabecera();
-
-      function limpiarErroresAgente() {
-        if (agenteInput) agenteInput.classList.remove("is-invalid");
-        if (agenteError) agenteError.textContent = "";
-      }
-
-      // Forzar siempre 5 dígitos en la captura
-      if (agenteInput) {
-        agenteInput.addEventListener("input", (e) => {
-          let v = e.target.value || "";
-          v = v.replace(/\D/g, "");
-          if (v.length > 5) v = v.slice(0, 5);
-          e.target.value = v;
-          limpiarErroresAgente();
-          if (v.length < 5 && agenteInfo) {
-            agenteInfo.textContent = "";
-          }
-        });
-
-        agenteInput.addEventListener("blur", () => {
-          const v = agenteInput.value.trim();
-          if (!v) return;
-
-          if (!/^\d{5}$/.test(v)) {
-            agenteInput.classList.add("is-invalid");
-            if (agenteError) {
-              agenteError.textContent =
-                "La clave del agente debe tener exactamente 5 dígitos.";
-            }
-            if (agenteInfo) agenteInfo.textContent = "";
-            return;
-          }
-
-          const agente = buscarAgentePorClave(v);
-          if (!agente) {
-            agenteInput.classList.add("is-invalid");
-            if (agenteError) {
-              agenteError.textContent =
-                "No se encontró un agente con esa clave.";
-            }
-            if (agenteInfo) agenteInfo.textContent = "";
-            return;
-          }
-
-          limpiarErroresAgente();
-          if (agenteInfo) {
-            agenteInfo.textContent = `Agente: ${agente.nombre}`;
-          }
-        });
-      }
-
-      function lastStep() {
-        return sections.length ? +sections.at(-1).dataset.step : 1;
-      }
-
-      function focusFirstInput(stepEl) {
-        const el =
-          stepEl && stepEl.querySelector("input, select, textarea, button");
-        if (el) el.focus({ preventScroll: true });
-      }
-
-      function showStep(n) {
-        if (!form) return;
-        const last = lastStep();
-        current = Math.max(1, Math.min(n, last));
-
-        sections.forEach((s) =>
-          s.classList.toggle("d-none", +s.dataset.step !== current)
-        );
-        steps.forEach((s) => {
-          s.classList.toggle("active", +s.dataset.step === current);
-          s.classList.toggle("done", +s.dataset.step < current);
-        });
-
-        btnPrev.disabled = current === 1;
-        btnNext.classList.toggle("d-none", current === last);
-        btnSubmit.classList.toggle("d-none", current !== last);
-
-        if (current === 4) {
-          buildResume();
-        }
-
-        // Al entrar al paso 3 (Envío al Agente) autollenamos fecha/hora si están vacíos
-        if (current === 3) {
-          autoFillEnvioAgenteAlEntrar();
-        }
-
-        focusFirstInput(sections.find((s) => +s.dataset.step === current));
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-
-      function buildResume() {
-        const data = Object.fromEntries(new FormData(form));
-        const pretty = {
-          colaborador: "Colaborador",
-          fecha: "Fecha",
-          hora_recepcion: "Hora de recepción",
-          agente_clave: "Agente clave",
-          forma_solicitud: "Forma de solicitud",
-          tipo_solicitud: "Tipo de solicitud",
-          enviado_area: "Enviado al área",
-          fecha_envio_area: "Fecha envío área",
-          hora_envio_area: "Hora envío área",
-          fecha_resp_area: "Fecha respuesta área",
-          hora_resp_area: "Hora respuesta área",
-          fecha_envio_agente: "Fecha envío agente",
-          hora_envio_agente: "Hora envío agente",
-          estatus: "Estatus",
-          fecha_seguimiento: "Fecha seguimiento",
-          comentarios: "Comentarios",
-        };
-        resume.innerHTML = Object.entries(pretty)
-          .map(([key, label]) => {
-            const val = (data[key] ?? "") || "—";
-            return `<div class="col-md-4"><div class="border rounded-3 p-3 bg-light mb-2"><div class="text-muted">${label}</div><div class="fw-semibold">${val}</div></div></div>`;
-          })
-          .join("");
-      }
-
-      function validateStep() {
-        let ok = true;
-        const visible = sections.find((s) => +s.dataset.step === current);
-        if (!visible) return true;
-
-        [...visible.querySelectorAll("[required]")].forEach((inp) => {
-          const name = inp.name;
-
-          if (!inp.value) {
-            inp.classList.add("is-invalid");
-            ok = false;
-          } else {
-            inp.classList.remove("is-invalid");
-          }
-
-          if (name === "agente_clave" && inp.value) {
-            const v = inp.value.trim();
-            if (!/^\d{5}$/.test(v)) {
-              inp.classList.add("is-invalid");
-              ok = false;
-              if (agenteInfo) {
-                agenteInfo.textContent =
-                  "La clave del agente debe tener exactamente 5 dígitos.";
-              }
-            }
-          }
-
-          inp.addEventListener(
-            "input",
-            () => inp.classList.remove("is-invalid"),
-            { once: true }
+          const fechaEnvAgenteInput = document.querySelector(
+            'input[name="fecha_envio_agente"]'
           );
-        });
+          const horaEnvAgenteInput = document.querySelector(
+            'input[name="hora_envio_agente"]'
+          );
 
-        if (current === 3) {
-          ok = validarHoraEnvioArea() && validarHoraEnvioAgente() && ok;
-        }
-
-        return ok;
-      }
-
-      function debounce(fn, ms = 400) {
-        let t;
-        return (...args) => {
-          clearTimeout(t);
-          t = setTimeout(() => fn(...args), ms);
-        };
-      }
-
-      function saveDraft(showToast) {
-        const data = Object.fromEntries(new FormData(form));
-        localStorage.setItem(
-          "helpdesk_draft",
-          JSON.stringify({ current, data, when: Date.now() })
-        );
-        if (showToast && window.bootstrap) {
-          const t = document.createElement("div");
-          t.className =
-            "toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 m-3";
-          t.role = "alert";
-          t.innerHTML = `<div class="d-flex"><div class="toast-body">Borrador guardado</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`;
-          document.body.appendChild(t);
-          const toast = new bootstrap.Toast(t);
-          toast.show();
-          t.addEventListener("hidden.bs.toast", () => t.remove());
-        }
-      }
-
-      const saveDraftDebounced = debounce(() => saveDraft(false), 500);
-
-      function parseDT(d, t) {
-        if (!d || !t) return null;
-        return new Date(`${d}T${t}`);
-      }
-
-      function humanDiff(ms) {
-        if (!Number.isFinite(ms)) return "—";
-        const min = Math.round(ms / 60000);
-        const h = Math.floor(min / 60);
-        const m = min % 60;
-        if (h <= 0) return `${m} min`;
-        if (m === 0) return `${h} h`;
-        return `${h} h ${m} min`;
-      }
-
-      function computeDurations() {
-        const dRec = form.fecha?.value,
-          tRec = form.hora_recepcion?.value;
-        const dEnvA = form.fecha_envio_area?.value,
-          tEnvA = form.hora_envio_area?.value;
-        const dResp = form.fecha_resp_area?.value,
-          tResp = form.hora_resp_area?.value;
-
-        const dtRec = parseDT(dRec, tRec);
-        const dtEnvA = parseDT(dEnvA, tEnvA);
-        const dtResp = parseDT(dResp, tResp);
-
-        const chipEnv = document.getElementById("chip_t_envio_area");
-        const chipEnvVal = chipEnv?.querySelector('[data-val="t_envio"]');
-        if (dtRec && dtEnvA && chipEnv && chipEnvVal) {
-          chipEnv.hidden = false;
-          chipEnvVal.textContent = humanDiff(dtEnvA - dtRec);
-        } else if (chipEnv) {
-          chipEnv.hidden = true;
-        }
-
-        const chipResp = document.getElementById("chip_t_resp_area");
-        const chipRespVal = chipResp?.querySelector('[data-val="t_resp"]');
-        if (dtEnvA && dtResp && chipResp && chipRespVal) {
-          chipResp.hidden = false;
-          chipRespVal.textContent = humanDiff(dtResp - dtEnvA);
-        } else if (chipResp) {
-          chipResp.hidden = true;
-        }
-      }
-
-      if (form) {
-        if (fechaEnvioArea)
-          fechaEnvioArea.addEventListener("change", validarHoraEnvioArea);
-        if (horaEnvioArea)
-          horaEnvioArea.addEventListener("change", validarHoraEnvioArea);
-        if (fechaEnvioAgente)
-          fechaEnvioAgente.addEventListener("change", validarHoraEnvioAgente);
-        if (horaEnvioAgente)
-          horaEnvioAgente.addEventListener("change", validarHoraEnvioAgente);
-
-        btnNext.addEventListener("click", () => {
-          if (validateStep()) {
-            current = Math.min(current + 1, lastStep());
-            showStep(current);
-            saveDraft();
-          }
-        });
-
-        btnPrev.addEventListener("click", () => {
-          current = Math.max(1, current - 1);
-          showStep(current);
-        });
-
-        btnSave.addEventListener("click", () => saveDraft(true));
-
-        form.addEventListener("submit", (e) => {
-          e.preventDefault();
-          if (!validateStep()) {
-            return;
-          }
-
-          const fd = new FormData(form);
-          const data = Object.fromEntries(fd.entries());
-
-          const usuarioStr = localStorage.getItem("hd_usuario");
-          if (usuarioStr) {
+          // Colaborador desde el login
+          if (usuarioStrGlobal && colabInput) {
             try {
-              const u = JSON.parse(usuarioStr);
-              data.usuario_login = u.username || null;
-              data.usuario_nombre = u.nombre || null;
-              data.usuario_rol = u.rol || null;
+              const u = JSON.parse(usuarioStrGlobal);
+              const nombre = u.nombre || u.username || "";
+              if (!colabInput.value && nombre) {
+                colabInput.value = nombre;
+              }
+              colabInput.readOnly = true;
+              colabInput.classList.add("bg-light", "text-muted");
             } catch (e) {
-              console.error("No se pudo leer hd_usuario", e);
+              console.error("No se pudo parsear hd_usuario", e);
             }
           }
 
-          console.log("Payload listo para /api/actividades:", data);
-          alert(
-            "Registro preparado para enviar (mock). Revisa la consola para ver el JSON que se mandaría."
-          );
+          // Fecha y hora de recepción por defecto = ahora
+          const now = new Date();
+          const pad = (n) => String(n).padStart(2, "0");
+          const yyyy = now.getFullYear();
+          const mm = pad(now.getMonth() + 1);
+          const dd = pad(now.getDate());
+          const hh = pad(now.getHours());
+          const mi = pad(now.getMinutes());
 
-          localStorage.removeItem("helpdesk_draft");
-          form.reset();
-          current = 1;
-          showStep(current);
-          initCabecera();
-        });
+          const fechaHoy = `${yyyy}-${mm}-${dd}`;
+          const horaAhora = `${hh}:${mi}`;
 
-        form.addEventListener("keydown", (e) => {
-          if (e.key !== "Enter") return;
-          const target = e.target;
-          if (!target || !(target instanceof HTMLElement)) return;
-          const isTextArea = target.tagName === "TEXTAREA";
+          if (fechaInput && !fechaInput.value) fechaInput.value = fechaHoy;
+          if (horaRecInput && !horaRecInput.value)
+            horaRecInput.value = horaAhora;
 
-          if (isTextArea && !e.shiftKey) {
-            return;
+          if (fechaEnvAgenteInput && !fechaEnvAgenteInput.value) {
+            fechaEnvAgenteInput.value = fechaInput?.value || fechaHoy;
+          }
+          if (horaEnvAgenteInput && !horaEnvAgenteInput.value) {
+            horaEnvAgenteInput.value = horaRecInput?.value || horaAhora;
           }
 
-          e.preventDefault();
+          // En NUEVOS registros no se captura fecha de seguimiento
+          const fsegNuevo = form.elements["fecha_seguimiento"];
+          if (fsegNuevo) {
+            fsegNuevo.value = ""; // sin valor
+            fsegNuevo.readOnly = true;
+            fsegNuevo.disabled = true;
+            fsegNuevo.classList.add("bg-light", "text-muted");
+          }
+        }
 
-          const currentSection = sections.find(
-            (s) => +s.dataset.step === current
-          );
-          if (!currentSection) return;
+        // ===== Eventos de agente clave =====
+        if (agenteInput) {
+          agenteInput.addEventListener("input", (e) => {
+            let v = e.target.value || "";
+            v = v.replace(/\D/g, "");
+            if (v.length > 5) v = v.slice(0, 5);
+            e.target.value = v;
 
-          const focusables = Array.from(
-            currentSection.querySelectorAll("input, select, textarea, button")
-          ).filter((el) => {
-            if (!(el instanceof HTMLElement)) return false;
-            if (el.disabled) return false;
-            if (el.type === "hidden") return false;
-            return el.offsetParent !== null;
+            limpiarErroresAgente();
+            if (v.length < 5 && agenteInfo) {
+              agenteInfo.textContent = "";
+            }
           });
 
-          const idx = focusables.indexOf(target);
+          agenteInput.addEventListener("blur", () => {
+            const v = agenteInput.value.trim();
+            if (!v) return;
 
-          // Enter especial para Agente Clave
-          if (target === agenteInput && !e.shiftKey) {
-            const clave = agenteInput.value.trim();
-            if (!/^\d{5}$/.test(clave)) {
+            if (!/^\d{5}$/.test(v)) {
               agenteInput.classList.add("is-invalid");
               if (agenteError) {
                 agenteError.textContent =
-                  "La clave del agente debe tener exactamente 5 dígitos.";
+                  "La clave debe tener exactamente 5 dígitos.";
               }
               if (agenteInfo) agenteInfo.textContent = "";
               return;
             }
-            const agente = buscarAgentePorClave(clave);
+
+            const agente = buscarAgentePorClave(v);
             if (!agente) {
               agenteInput.classList.add("is-invalid");
               if (agenteError) {
@@ -1151,129 +778,821 @@
               if (agenteInfo) agenteInfo.textContent = "";
               return;
             }
+
             limpiarErroresAgente();
             if (agenteInfo) {
               agenteInfo.textContent = `Agente: ${agente.nombre}`;
             }
-            if (idx > -1 && idx < focusables.length - 1) {
-              focusables[idx + 1].focus();
-            }
-            return;
-          }
-
-          if (e.shiftKey) {
-            if (idx > 0) {
-              focusables[idx - 1].focus();
-            } else {
-              if (current > 1) {
-                current = current - 1;
-                showStep(current);
-              }
-            }
-            return;
-          }
-
-          if (idx > -1 && idx < focusables.length - 1) {
-            focusables[idx + 1].focus();
-          } else {
-            if (validateStep()) {
-              current = Math.min(current + 1, lastStep());
-              showStep(current);
-            }
-          }
-        });
-
-        [
-          "fecha",
-          "hora_recepcion",
-          "fecha_envio_area",
-          "hora_envio_area",
-          "fecha_resp_area",
-          "hora_resp_area",
-        ].forEach((name) => {
-          if (form.elements[name])
-            form.elements[name].addEventListener("input", computeDurations);
-        });
-
-        (function () {
-          const draft = JSON.parse(
-            localStorage.getItem("helpdesk_draft") || "null"
-          );
-          if (draft) {
-            current = draft.current || 1;
-            for (const [k, v] of Object.entries(draft.data || {})) {
-              const el = form.elements[k];
-              if (el) el.value = v;
-            }
-          }
-          showStep(current);
-          computeDurations();
-        })();
-      }
-
-      // ====== RENOVACIONES (form específico) ======
-      const renForm = document.getElementById("renewForm");
-      const renFecha = document.getElementById("ren_fecha");
-      const renPolizaNueva = document.getElementById("ren_poliza_nueva");
-      const renPolizaAnterior = document.getElementById("ren_poliza_anterior");
-      const renSaveBtn = document.getElementById("renSave");
-
-      function setNowIfEmpty() {
-        if (!renFecha || renFecha.value) return;
-      }
-
-      if (renForm) {
-        function maybeSetNow() {
-          if (!renFecha.value) {
-            const now = new Date();
-            const pad = (n) => String(n).padStart(2, "0");
-            renFecha.value = `${now.getFullYear()}-${pad(
-              now.getMonth() + 1
-            )}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(
-              now.getMinutes()
-            )}`;
-          }
+          });
         }
 
-        renPolizaNueva.addEventListener("input", maybeSetNow);
-        renPolizaAnterior.addEventListener("input", maybeSetNow);
+        // ===== Helpers de wizard =====
+        function lastStep() {
+          return sections.length ? +sections.at(-1).dataset.step : 1;
+        }
 
-        renSaveBtn.addEventListener("click", () => {
-          const data = Object.fromEntries(new FormData(renForm));
-          localStorage.setItem("helpdesk_renov_draft", JSON.stringify(data));
-          if (window.bootstrap) {
+        function isStepVisible(n) {
+          if (!form) return false;
+          // Por ahora TODOS los pasos del 1 al último son visibles
+          return true;
+        }
+
+        function nextVisibleStep(n) {
+          let t = n + 1;
+          const last = lastStep();
+          while (t <= last && !isStepVisible(t)) t++;
+          return Math.min(t, last);
+        }
+
+        function prevVisibleStep(n) {
+          let t = n - 1;
+          while (t >= 1 && !isStepVisible(t)) t--;
+          return Math.max(t, 1);
+        }
+
+        function focusFirstInput(stepEl) {
+          const el =
+            stepEl && stepEl.querySelector("input, select, textarea, button");
+          if (el) el.focus({ preventScroll: true });
+        }
+
+        function showStep(n) {
+          if (!form) return;
+          const last = lastStep();
+          current = Math.max(1, Math.min(n, last));
+          sections.forEach((s) =>
+            s.classList.toggle("d-none", +s.dataset.step !== current)
+          );
+          steps.forEach((s) => {
+            s.classList.toggle("active", +s.dataset.step === current);
+            s.classList.toggle("done", +s.dataset.step < current);
+          });
+          if (btnPrev) btnPrev.disabled = current === 1;
+          if (btnNext) btnNext.classList.toggle("d-none", current === last);
+          if (btnSubmit) btnSubmit.classList.toggle("d-none", current !== last);
+          if (current === last) buildResume();
+          focusFirstInput(sections.find((s) => +s.dataset.step === current));
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function buildResume() {
+          if (!form || !resume) return;
+          const data = Object.fromEntries(new FormData(form));
+          const pretty = {
+            colaborador: "Colaborador",
+            fecha: "Fecha",
+            hora_recepcion: "Hora de recepción",
+            agente_clave: "Agente clave",
+            forma_solicitud: "Forma de solicitud",
+            tipo_solicitud: "Tipo de solicitud",
+            enviado_area: "Enviado al área",
+            fecha_envio_area: "Fecha envío área",
+            hora_envio_area: "Hora envío área",
+            fecha_resp_area: "Fecha respuesta área",
+            hora_resp_area: "Hora respuesta área",
+            fecha_envio_agente: "Fecha envío agente",
+            hora_envio_agente: "Hora envío agente",
+            estatus: "Estatus",
+            fecha_seguimiento: "Fecha seguimiento",
+            comentarios: "Comentarios",
+          };
+          resume.innerHTML = Object.entries(pretty)
+            .map(([key, label]) => {
+              const val = (data[key] ?? "") || "—";
+              return `<div class="col-md-4"><div class="border rounded-3 p-3 bg-light mb-2"><div class="text-muted">${label}</div><div class="fw-semibold">${val}</div></div></div>`;
+            })
+            .join("");
+        }
+
+        function validateStep() {
+          if (!form) return false;
+          let ok = true;
+          const visible = sections.find((s) => +s.dataset.step === current);
+          visible &&
+            [...visible.querySelectorAll("[required]")].forEach((inp) => {
+              if (inp.disabled) return; // no validar deshabilitados
+              const name = inp.name;
+
+              if (!inp.value) {
+                inp.classList.add("is-invalid");
+                ok = false;
+              } else {
+                inp.classList.remove("is-invalid");
+              }
+
+              if (name === "agente_clave" && inp.value) {
+                const v = inp.value.trim();
+                if (!/^\d{5}$/.test(v)) {
+                  inp.classList.add("is-invalid");
+                  ok = false;
+                  if (agenteInfo) {
+                    agenteInfo.textContent =
+                      "La clave del agente debe tener exactamente 5 dígitos.";
+                  }
+                }
+              }
+
+              inp.addEventListener(
+                "input",
+                () => inp.classList.remove("is-invalid"),
+                { once: true }
+              );
+            });
+          return ok;
+        }
+
+        // Debounce
+        function debounce(fn, ms = 400) {
+          let t;
+          return (...args) => {
+            clearTimeout(t);
+            t = setTimeout(() => fn(...args), ms);
+          };
+        }
+
+        function saveDraft(showToast) {
+          if (!form) return;
+          const data = Object.fromEntries(new FormData(form));
+          localStorage.setItem(
+            "helpdesk_draft",
+            JSON.stringify({ current, data, when: Date.now() })
+          );
+          if (showToast && window.bootstrap) {
             const t = document.createElement("div");
             t.className =
               "toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 m-3";
             t.role = "alert";
-            t.innerHTML = `<div class="d-flex"><div class="toast-body">Borrador de renovación guardado</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`;
+            t.innerHTML = `<div class="d-flex"><div class="toast-body">Borrador guardado</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`;
             document.body.appendChild(t);
             const toast = new bootstrap.Toast(t);
             toast.show();
             t.addEventListener("hidden.bs.toast", () => t.remove());
           }
-        });
+        }
+        const saveDraftDebounced = debounce(() => saveDraft(false), 500);
 
-        renForm.addEventListener("submit", (e) => {
-          e.preventDefault();
-          alert("Renovación registrada (mock). Aquí haríamos POST a /renewals");
-          localStorage.removeItem("helpdesk_renov_draft");
-          renForm.reset();
-          if (renFecha) renFecha.value = "";
-        });
+        // ====== Cálculo de tiempos ======
+        function parseDT(d, t) {
+          if (!d || !t) return null;
+          return new Date(`${d}T${t}`);
+        }
 
-        (function () {
-          const d = JSON.parse(
-            localStorage.getItem("helpdesk_renov_draft") || "null"
-          );
-          if (d) {
-            Object.entries(d).forEach(([k, v]) => {
-              const el = renForm.elements[k];
-              if (el) el.value = v;
+        function humanDiff(ms) {
+          if (!Number.isFinite(ms)) return "—";
+          const min = Math.round(ms / 60000);
+          const h = Math.floor(min / 60),
+            m = min % 60;
+          if (h <= 0) return `${m} min`;
+          if (m === 0) return `${h} h`;
+          return `${h} h ${m} min`;
+        }
+
+        function computeDurations() {
+          if (!form) return;
+          const dRec = form.fecha?.value,
+            tRec = form.hora_recepcion?.value;
+          const dEnvA = form.fecha_envio_area?.value,
+            tEnvA = form.hora_envio_area?.value;
+          const dResp = form.fecha_resp_area?.value,
+            tResp = form.hora_resp_area?.value;
+
+          const dtRec = parseDT(dRec, tRec);
+          const dtEnvA = parseDT(dEnvA, tEnvA);
+          const dtResp = parseDT(dResp, tResp);
+
+          const chipEnv = document.getElementById("chip_t_envio_area");
+          const chipEnvVal = chipEnv?.querySelector('[data-val="t_envio"]');
+          if (dtRec && dtEnvA && chipEnv && chipEnvVal) {
+            chipEnv.hidden = false;
+            chipEnvVal.textContent = humanDiff(dtEnvA - dtRec);
+          } else if (chipEnv) {
+            chipEnv.hidden = true;
+          }
+
+          const chipResp = document.getElementById("chip_t_resp_area");
+          const chipRespVal = chipResp?.querySelector('[data-val="t_resp"]');
+          if (dtEnvA && dtResp && chipResp && chipRespVal) {
+            chipResp.hidden = false;
+            chipRespVal.textContent = humanDiff(dtResp - dtEnvA);
+          } else if (chipResp) {
+            chipResp.hidden = true;
+          }
+        }
+
+        // ====== MOCK "BASE DE DATOS" DE ACTIVIDADES ======
+        const STORAGE_KEY_ACTIVIDADES = "hd_actividades";
+
+        function loadStoredActivities() {
+          try {
+            return JSON.parse(
+              localStorage.getItem(STORAGE_KEY_ACTIVIDADES) || "[]"
+            );
+          } catch (e) {
+            console.error("No se pudo leer hd_actividades", e);
+            return [];
+          }
+        }
+
+        function saveStoredActivities(lista) {
+          try {
+            localStorage.setItem(
+              STORAGE_KEY_ACTIVIDADES,
+              JSON.stringify(lista)
+            );
+          } catch (e) {
+            console.error("No se pudo guardar hd_actividades", e);
+          }
+        }
+
+        function getNextActivityId(lista) {
+          if (!Array.isArray(lista) || !lista.length) return 1;
+          const maxId = lista.reduce((max, a) => {
+            const idNum =
+              typeof a.id === "number" ? a.id : parseInt(a.id, 10) || 0;
+            return Math.max(max, idNum);
+          }, 0);
+          return maxId + 1;
+        }
+
+        function slugifyColaborador(str) {
+          return (str || "")
+            .toUpperCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^A-Z0-9]/g, "")
+            .slice(1, 5);
+        }
+
+        function buildActividadFromForm(data) {
+          // ===== Usuario logueado =====
+          let usuarioLogin = null;
+          let usuarioNombre = null;
+          let usuarioRol = null;
+
+          if (usuarioStrGlobal) {
+            try {
+              const u = JSON.parse(usuarioStrGlobal);
+              usuarioLogin = u.username || null;
+              usuarioNombre = u.nombre || null;
+              usuarioRol = u.rol || null;
+            } catch (e) {
+              console.error("No se pudo leer hd_usuario", e);
+            }
+          }
+
+          // ===== Historial de seguimientos =====
+          let seguimientos = Array.isArray(editingActividad?.seguimientos)
+            ? [...editingActividad.seguimientos]
+            : [];
+
+          // Si hay comentario nuevo, lo agregamos al historial
+          if ((data.comentarios || "").trim()) {
+            seguimientos.push({
+              fechaISO: new Date().toISOString(),
+              comentario: data.comentarios.trim(),
+              usuario: usuarioLogin || usuarioNombre || null,
             });
           }
-        })();
-      }
+
+          // ===== Merge de datos cuando estamos editando =====
+          // Campos que se “pierden” porque están disabled en el form
+          if (editingActividad) {
+            // Recepción
+            data.fecha =
+              data.fecha ||
+              editingActividad.fechaRecepcion ||
+              (editingActividad.fechaRegistro || "").slice(0, 10);
+            data.hora_recepcion =
+              data.hora_recepcion || editingActividad.horaRecepcion || editingActividad.horaRegistro;
+
+            // Envío al área
+            data.enviado_area = data.enviado_area || editingActividad.areaDestino;
+            data.fecha_envio_area =
+              data.fecha_envio_area || editingActividad.fechaEnvioArea;
+            data.hora_envio_area =
+              data.hora_envio_area || editingActividad.horaEnvioArea;
+
+            // Respuesta del área
+            data.fecha_resp_area =
+              data.fecha_resp_area || editingActividad.fechaRespArea;
+            data.hora_resp_area =
+              data.hora_resp_area || editingActividad.horaRespArea;
+
+            // Envío al agente
+            data.fecha_envio_agente =
+              data.fecha_envio_agente || editingActividad.fechaEnvioAgente;
+            data.hora_envio_agente =
+              data.hora_envio_agente || editingActividad.horaEnvioAgente;
+
+            // Seguimiento
+            data.fecha_seguimiento =
+              data.fecha_seguimiento || editingActividad.fechaSeguimiento;
+          }
+
+          // ===== Cálculo de tiempos =====
+
+          // Inicio del proceso = recepción
+          const fechaRegistro =
+            data.fecha || new Date().toISOString().slice(0, 10);
+          const horaRegistro = data.hora_recepcion || null;
+          const dtInicio = parseDT(fechaRegistro, horaRegistro);
+
+          // Fin del proceso = preferimos envío al agente
+          let dtFinProceso = null;
+          if (data.fecha_envio_agente && data.hora_envio_agente) {
+            dtFinProceso = parseDT(
+              data.fecha_envio_agente,
+              data.hora_envio_agente
+            );
+          } else if (data.fecha_resp_area && data.hora_resp_area) {
+            dtFinProceso = parseDT(data.fecha_resp_area, data.hora_resp_area);
+          } else if (data.fecha_envio_area && data.hora_envio_area) {
+            dtFinProceso = parseDT(
+              data.fecha_envio_area,
+              data.hora_envio_area
+            );
+          }
+
+          // Tiempo total del proceso
+          let tiempoTotalMin = null;
+          if (dtInicio && dtFinProceso && dtFinProceso > dtInicio) {
+            tiempoTotalMin = Math.round((dtFinProceso - dtInicio) / 60000);
+          }
+
+          // Tiempo que se tardó el área (envío área -> respuesta área)
+          let tiempoAreaMin = null;
+          if (
+            data.fecha_envio_area &&
+            data.hora_envio_area &&
+            data.fecha_resp_area &&
+            data.hora_resp_area
+          ) {
+            const dtEnvioArea = parseDT(
+              data.fecha_envio_area,
+              data.hora_envio_area
+            );
+            const dtRespArea = parseDT(
+              data.fecha_resp_area,
+              data.hora_resp_area
+            );
+            if (dtEnvioArea && dtRespArea && dtRespArea > dtEnvioArea) {
+              tiempoAreaMin = Math.round((dtRespArea - dtEnvioArea) / 60000);
+            }
+          }
+
+          // ===== Estatus =====
+          let estatus;
+          if (data.estatus) {
+            // Si viene del form (cuando no está disabled)
+            estatus = data.estatus;
+          } else if (editingActividad && editingActividad.estatus) {
+            // En edición, respetamos el estatus que ya tenía
+            estatus = editingActividad.estatus;
+          } else if (data.fecha_envio_agente) {
+            estatus = "Finalizado";
+          } else if (data.enviado_area) {
+            estatus = "Enviado a área";
+          } else {
+            estatus = "En curso";
+          }
+
+          // ===== Colaborador / folio =====
+          const colaboradorForm = data.colaborador || null;
+          const colaboradorFinal =
+            colaboradorForm || usuarioNombre || usuarioLogin || null;
+
+          const fechaKey = (fechaRegistro || "").replace(/-/g, "");
+          const horaKey = (horaRegistro || "").replace(":", "");
+          const colKey = slugifyColaborador(colaboradorFinal || usuarioLogin);
+
+          const folio =
+            editingActividad?.folio ||
+            `${fechaKey}-${horaKey}-${colKey || "SINCOLAB"}`;
+
+          // ===== Construimos el objeto actividad =====
+          const actividad = {
+            id: editingActividad?.id ?? 0,
+            folio,
+
+            fechaRegistro,
+            horaRegistro,
+            tipoActividad: data.tipo_solicitud || null,
+            areaDestino: data.enviado_area || null,
+            tiempoTotalMin,
+            tiempoAreaMin,
+            prioridad: "Normal",
+
+            colaborador: colaboradorFinal,
+            usuarioRegistro: editingActividad?.usuarioRegistro || usuarioLogin,
+            usuarioNombre,
+            usuarioRol,
+
+            agenteClave: data.agente_clave || editingActividad?.agenteClave || null,
+            formaSolicitud:
+              data.forma_solicitud || editingActividad?.formaSolicitud || null,
+            tipoSolicitud:
+              data.tipo_solicitud || editingActividad?.tipoSolicitud || null,
+            estatus,
+
+            fechaRecepcion: data.fecha || null,
+            horaRecepcion: data.hora_recepcion || null,
+
+            fechaEnvioArea: data.fecha_envio_area || null,
+            horaEnvioArea: data.hora_envio_area || null,
+            fechaRespArea: data.fecha_resp_area || null,
+            horaRespArea: data.hora_resp_area || null,
+
+            fechaEnvioAgente: data.fecha_envio_agente || null,
+            horaEnvioAgente: data.hora_envio_agente || null,
+            asuntoCorreo: data.asunto_correo || editingActividad?.asuntoCorreo || null,
+
+            fechaSeguimiento: data.fecha_seguimiento || null,
+            comentarios: data.comentarios || null,
+
+            updatedAt: new Date().toISOString(),
+            seguimientos,
+          };
+
+          return actividad;
+        }
+
+        // ====== MODO EDICIÓN (?id=...) ======
+        let editingId = editIdParam ? parseInt(editIdParam, 10) : null;
+        let editingActividad = null;
+
+        if (form && editingId != null && !isNaN(editingId)) {
+          const lista = loadStoredActivities();
+          editingActividad = lista.find(
+            (a) => String(a.id) === String(editingId)
+          );
+
+          if (editingActividad) {
+            const mapping = {
+              colaborador: "colaborador",
+              fecha: "fechaRecepcion",
+              hora_recepcion: "horaRecepcion",
+              agente_clave: "agenteClave",
+              forma_solicitud: "formaSolicitud",
+              tipo_solicitud: "tipoSolicitud",
+              enviado_area: "areaDestino",
+              fecha_envio_area: "fechaEnvioArea",
+              hora_envio_area: "horaEnvioArea",
+              fecha_resp_area: "fechaRespArea",
+              hora_resp_area: "horaRespArea",
+              fecha_envio_agente: "fechaEnvioAgente",
+              hora_envio_agente: "horaEnvioAgente",
+              estatus: "estatus",
+              fecha_seguimiento: "fechaSeguimiento",
+              comentarios: "comentarios",
+              asunto_correo: "asuntoCorreo",
+            };
+
+            Object.entries(mapping).forEach(([fieldName, prop]) => {
+              const field = form.elements[fieldName];
+              if (field && editingActividad[prop] != null) {
+                field.value = editingActividad[prop];
+              }
+            });
+
+            const esFinalizada = (editingActividad.estatus || "")
+              .toLowerCase()
+              .includes("final");
+
+            // ===== Paso 1 =====
+            const paso1 = document.querySelector('#pane-general section[data-step="1"]');
+
+            if (paso1) {
+              if (!esAdmin) {
+                // Colaborador: paso 1 solo lectura,
+                // pero SÍ puede editar fecha/hora respuesta del área
+                paso1
+                  .querySelectorAll("input, select, textarea, button")
+                  .forEach((el) => {
+                    if (el && el.name) el.disabled = true;
+                  });
+
+                ["fecha_resp_area", "hora_resp_area"].forEach((n) => {
+                  const el = form.elements[n];
+                  if (el) el.disabled = false;
+                });
+              } else {
+                // Admin: puede editar todo el paso 1
+                paso1
+                  .querySelectorAll("input, select, textarea, button")
+                  .forEach((el) => {
+                    if (el && el.name) el.disabled = false;
+                  });
+              }
+            }
+
+            // ===== Paso 2 (Seguimiento) visible siempre en edición =====
+            const step2Pill = steps.find((s) => s.dataset.step === "2");
+            if (step2Pill) step2Pill.classList.remove("d-none");
+            const sec2 = document.querySelector(
+              '#pane-general section[data-step="2"]'
+            );
+            if (sec2) {
+              sec2.classList.remove("d-none");
+
+              // Fecha seguimiento: autollenada pero solo lectura
+              const fseg = form.elements["fecha_seguimiento"];
+              if (fseg) {
+                fseg.value =
+                  editingActividad.fechaSeguimiento ||
+                  new Date().toISOString().slice(0, 10);
+                fseg.readOnly = true;
+                fseg.disabled = true;
+                fseg.classList.add("bg-light", "text-muted");
+              }
+
+              // Estatus:
+              // - Admin: siempre puede cambiarlo
+              // - Colaborador: solo si no está finalizada
+              const est = form.elements["estatus"];
+              if (est) {
+                if (!esAdmin && esFinalizada) {
+                  est.disabled = true;
+                  est.classList.add("bg-light", "text-muted");
+                } else {
+                  est.disabled = false;
+                  est.classList.remove("bg-light", "text-muted");
+                }
+              }
+            }
+
+            // Paso inicial en edición → nos vamos directo al Seguimiento si está visible
+            const targetStep = isStepVisible(2) ? 2 : 1;
+            current = targetStep;
+            showStep(current);
+            computeDurations();
+          }
+        }
+        if (form) {
+          // Botones de navegación
+          btnNext.addEventListener("click", () => {
+            if (validateStep()) {
+              current = nextVisibleStep(current);
+              showStep(current);
+              saveDraft();
+            }
+          });
+
+          if (btnPrev) {
+            btnPrev.addEventListener("click", () => {
+              current = prevVisibleStep(current);
+              showStep(current);
+            });
+          }
+
+          if (btnSave) {
+            btnSave.addEventListener("click", () => saveDraft(true));
+          }
+
+          // Submit
+          form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            if (!validateStep()) return;
+
+            // Regla de horario envío al agente
+            const fechaEnv = form.elements["fecha_envio_agente"]?.value;
+            const horaEnv = form.elements["hora_envio_agente"]?.value;
+
+            if (fechaEnv && horaEnv) {
+              const dtEnv = new Date(`${fechaEnv}T${horaEnv}`);
+              const day = dtEnv.getDay(); // 0 dom, 6 sáb
+              const minutes = dtEnv.getHours() * 60 + dtEnv.getMinutes();
+
+              const start = 8 * 60 + 30;
+              const end = 18 * 60 + 30;
+
+              if (day === 0 || day === 6 || minutes < start || minutes > end) {
+                alert(
+                  "La fecha/hora de envío al agente debe estar entre lunes y viernes, de 08:30 a 18:30.\n\nPor favor ajusta el campo 'Fecha/Hora envío al Agente'."
+                );
+                if (form.elements["hora_envio_agente"]) {
+                  form.elements["hora_envio_agente"].focus();
+                }
+                return;
+              }
+            }
+
+            const fd = new FormData(form);
+            
+            if (editingId != null) {
+              const hoy = new Date().toISOString().slice(0, 10);
+              fd.set("fecha_seguimiento", hoy);
+            }
+
+            const raw = Object.fromEntries(fd.entries());
+            const actividad = buildActividadFromForm(raw);
+
+            const lista = loadStoredActivities();
+
+            if (editingId != null && editingActividad) {
+              const idx = lista.findIndex(
+                (a) => String(a.id) === String(editingId)
+              );
+              actividad.id = editingActividad.id;
+              actividad.createdAt =
+                editingActividad.createdAt || actividad.createdAt;
+              actividad.folio = editingActividad.folio || actividad.folio;
+
+              if (idx >= 0) {
+                lista[idx] = actividad;
+              } else {
+                lista.push(actividad);
+              }
+
+              alert("Actividad actualizada (mock).");
+            } else {
+              actividad.id = getNextActivityId(lista);
+              lista.push(actividad);
+              alert("Actividad registrada (mock).");
+            }
+
+            saveStoredActivities(lista);
+            localStorage.removeItem("helpdesk_draft");
+            window.location.href = "actividades.html";
+          });
+
+          // Enter para navegar / validar
+          form.addEventListener("keydown", (e) => {
+            if (e.key !== "Enter") return;
+            const target = e.target;
+            if (!target || !(target instanceof HTMLElement)) return;
+
+            const isTextArea = target.tagName === "TEXTAREA";
+            if (isTextArea && !e.shiftKey) {
+              return;
+            }
+
+            e.preventDefault();
+
+            const currentSection = sections.find(
+              (s) => +s.dataset.step === current
+            );
+            if (!currentSection) return;
+
+            const focusables = Array.from(
+              currentSection.querySelectorAll("input, select, textarea, button")
+            ).filter((el) => {
+              if (!(el instanceof HTMLElement)) return false;
+              if (el.disabled) return false;
+              if (el.type === "hidden") return false;
+              return el.offsetParent !== null;
+            });
+
+            const idx = focusables.indexOf(target);
+
+            if (target === agenteInput && !e.shiftKey) {
+              const clave = agenteInput.value.trim();
+
+              if (!/^\d{5}$/.test(clave)) {
+                agenteInput.classList.add("is-invalid");
+                if (agenteInfo) {
+                  agenteInfo.textContent =
+                    "La clave del agente debe tener exactamente 5 dígitos.";
+                }
+                return;
+              }
+
+              const agente = buscarAgentePorClave(clave);
+              if (!agente) {
+                agenteInput.classList.add("is-invalid");
+                if (agenteInfo) {
+                  agenteInfo.textContent =
+                    "No se encontró un agente con esa clave.";
+                }
+                return;
+              }
+
+              agenteInput.classList.remove("is-invalid");
+              if (agenteInfo) {
+                agenteInfo.textContent = `Agente: ${agente.nombre}`;
+              }
+
+              if (idx > -1 && idx < focusables.length - 1) {
+                focusables[idx + 1].focus();
+              }
+              return;
+            }
+
+            if (e.shiftKey) {
+              if (idx > 0) {
+                focusables[idx - 1].focus();
+              } else {
+                if (current > 1) {
+                  current = current - 1;
+                  showStep(current);
+                }
+              }
+              return;
+            }
+
+            if (idx > -1 && idx < focusables.length - 1) {
+              focusables[idx + 1].focus();
+            } else {
+              if (validateStep()) {
+                current = nextVisibleStep(current);
+                showStep(current);
+              }
+            }
+          });
+
+          // Recalcular tiempos cuando cambian fechas/horas
+          [
+            "fecha",
+            "hora_recepcion",
+            "fecha_envio_area",
+            "hora_envio_area",
+            "fecha_resp_area",
+            "hora_resp_area",
+          ].forEach((name) => {
+            if (form.elements[name])
+              form.elements[name].addEventListener("input", computeDurations);
+          });
+
+          // Cargar borrador (solo si NO es edición) 
+          (function () {
+            const draft = JSON.parse(
+              localStorage.getItem("helpdesk_draft") || "null"
+            );
+            if (draft && !editIdParam) {
+              current = draft.current || 1;
+              for (const [k, v] of Object.entries(draft.data || {})) {
+                const el = form.elements[k];
+                if (el && !el.value) el.value = v;
+              }
+            }
+            showStep(current);
+            computeDurations();
+          })();
+        }
+
+        // ====== RENOVACIONES (sección aparte, mock) ======
+        const renForm = document.getElementById("renewForm");
+        const renFecha = document.getElementById("ren_fecha");
+        const renPolizaNueva = document.getElementById("ren_poliza_nueva");
+        const renPolizaAnterior = document.getElementById(
+          "ren_poliza_anterior"
+        );
+        const renSaveBtn = document.getElementById("renSave");
+
+        if (renForm) {
+          function maybeSetNow() {
+            if (!renFecha.value) {
+              const now = new Date();
+              const pad = (n) => String(n).padStart(2, "0");
+              renFecha.value = `${now.getFullYear()}-${pad(
+                now.getMonth() + 1
+              )}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(
+                now.getMinutes()
+              )}`;
+            }
+          }
+          renPolizaNueva.addEventListener("input", maybeSetNow);
+          renPolizaAnterior.addEventListener("input", maybeSetNow);
+
+          renSaveBtn.addEventListener("click", () => {
+            const data = Object.fromEntries(new FormData(renForm));
+            localStorage.setItem("helpdesk_renov_draft", JSON.stringify(data));
+            if (window.bootstrap) {
+              const t = document.createElement("div");
+              t.className =
+                "toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 m-3";
+              t.role = "alert";
+              t.innerHTML = `<div class="d-flex"><div class="toast-body">Borrador de renovación guardado</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`;
+              document.body.appendChild(t);
+              const toast = new bootstrap.Toast(t);
+              toast.show();
+              t.addEventListener("hidden.bs.toast", () => t.remove());
+            }
+          });
+
+          renForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            alert(
+              "Renovación registrada (mock). Aquí haríamos POST a /renewals"
+            );
+            localStorage.removeItem("helpdesk_renov_draft");
+            renForm.reset();
+            if (renFecha) renFecha.value = "";
+          });
+
+          (function () {
+            const d = JSON.parse(
+              localStorage.getItem("helpdesk_renov_draft") || "null"
+            );
+            if (d) {
+              Object.entries(d).forEach(([k, v]) => {
+                const el = renForm.elements[k];
+                if (el) el.value = v;
+              });
+            }
+          })();
+        }
+      });
     </script>
 
     <!-- Router SPA -->
@@ -1354,7 +1673,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
-
-
-
-

@@ -182,16 +182,16 @@
                   Resultados
                   <span class="text-muted fw-normal">(36 registros)</span>
                 </h2>
-                  <a
-                    href="registro.html"
-                    data-spa
-                    class="btn btn-sm btn-outline-primary"
-                  >
-                    <i class="bi bi-plus-lg" aria-hidden="true"></i>
-                    <span class="d-none d-sm-inline">Nueva Actividad</span>
-                  </a>
-                </div>
+                <a
+                  href="registro.html"
+                  data-spa
+                  class="btn btn-sm btn-outline-primary"
+                >
+                  <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                  <span class="d-none d-sm-inline">Nueva Actividad</span>
+                </a>
               </div>
+          
               <div class="card-body p-0">
                 <div class="table-responsive">
                   <table class="table align-middle mb-0">
@@ -208,91 +208,12 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>21/10/2025</td>
-                        <td>Vladimir Turral</td>
-                        <td>Renovación</td>
-                        <td>AOF</td>
-                        <td>
-                          <span class="badge bg-success">Finalizado</span>
-                        </td>
-                        <td>05:37 h</td>
-                        <td class="text-end">
-                          <a
-                            href="#"
-                            class="btn btn-sm btn-outline-primary"
-                            aria-label="Ver actividad 1"
-                          >
-                            <i class="bi bi-eye" aria-hidden="true"></i>
-                          </a>
-                          <a
-                            href="#"
-                            class="btn btn-sm btn-outline-secondary"
-                            aria-label="Editar actividad 1"
-                          >
-                            <i class="bi bi-pencil" aria-hidden="true"></i>
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>20/10/2025</td>
-                        <td>Samuel Díaz</td>
-                        <td>Cancelación</td>
-                        <td>Caja Metepec</td>
-                        <td>
-                          <span class="badge bg-warning text-dark"
-                            >En curso</span
-                          >
-                        </td>
-                        <td>04:12 h</td>
-                        <td class="text-end">
-                          <a
-                            href="#"
-                            class="btn btn-sm btn-outline-primary"
-                            aria-label="Ver actividad 2"
-                          >
-                            <i class="bi bi-eye" aria-hidden="true"></i>
-                          </a>
-                          <a
-                            href="#"
-                            class="btn btn-sm btn-outline-secondary"
-                            aria-label="Editar actividad 2"
-                          >
-                            <i class="bi bi-pencil" aria-hidden="true"></i>
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>19/10/2025</td>
-                        <td>Itzel Martínez</td>
-                        <td>Aplicación de Primas</td>
-                        <td>Control Calidad</td>
-                        <td><span class="badge bg-danger">Bloqueado</span></td>
-                        <td>06:55 h</td>
-                        <td class="text-end">
-                          <a
-                            href="#"
-                            class="btn btn-sm btn-outline-primary"
-                            aria-label="Ver actividad 3"
-                          >
-                            <i class="bi bi-eye" aria-hidden="true"></i>
-                          </a>
-                          <a
-                            href="#"
-                            class="btn btn-sm btn-outline-secondary"
-                            aria-label="Editar actividad 3"
-                          >
-                            <i class="bi bi-pencil" aria-hidden="true"></i>
-                          </a>
-                        </td>
-                      </tr>
+                      <!-- aquí ya luego metemos las filas dinámicas -->
                     </tbody>
                   </table>
                 </div>
               </div>
+          
               <div class="card-footer bg-white">
                 <!-- Primera fila: info y paginación -->
                 <div
@@ -303,7 +224,6 @@
                   </div>
                   <nav aria-label="Paginación de resultados">
                     <ul class="pagination pagination-sm mb-0">
-                      <!-- deja aquí tu paginación tal como ya la tenías -->
                       <li class="page-item disabled" aria-disabled="true">
                         <a
                           class="page-link"
@@ -335,7 +255,7 @@
                     </ul>
                   </nav>
                 </div>
-              
+          
                 <!-- Segunda fila: botones CSV -->
                 <div class="mt-3 d-flex justify-content-end gap-2 flex-wrap">
                   <!-- Exportar: TODOS lo ven -->
@@ -343,7 +263,7 @@
                     <i class="bi bi-file-earmark-arrow-down me-1"></i>
                     Exportar CSV
                   </button>
-              
+          
                   <!-- Importar: solo admin (lo controla JS con display:none/flex) -->
                   <div
                     id="importSection"
@@ -363,6 +283,7 @@
                   </div>
                 </div>
               </div>
+            </div>
           </section>
         </main>
       </div>
@@ -464,6 +385,7 @@
     </script>
   </body>
 </html>
+
 
 
 

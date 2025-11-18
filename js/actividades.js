@@ -289,3 +289,124 @@ document.addEventListener("DOMContentLoaded", () => {
   // Primera carga
   refresh();
 });
+
+function loadStoredActivities() {
+  try {
+    return JSON.parse(localStorage.getItem("hd_actividades") || "[]");
+  } catch (e) {
+    console.error("No se pudo leer hd_actividades", e);
+    return [];
+  }
+}
+
+function exportActividadesCSV() {
+  const actividades = loadStoredActivities();
+  if (!actividades.length) {
+    alert("No hay actividades registradas para exportar.");
+    return;
+  }
+
+  const headers = Object.keys(actividades[0] || {});
+
+  const escape = (val) =>
+    `"${(val ?? "").toString().replace(/"/g, '""')}"`;
+
+  const lines = [];
+  lines.push(headers.join(",")); // encabezados
+
+  actividades.forEach((a) => {
+    const row = headers.map((h) => escape(a[h]));
+    lines.push(row.join(","));
+  });
+
+  const csvContent = lines.join("\r\n");
+  const blob = new Blob([csvContent], {
+    type: "text/csv;charset=utf-8;",
+  });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `actividades_${new Date()
+    .toISOString()
+    .slice(0, 10)}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+function parseCsvLine(line) {
+  // Soporta comas dentro de comillas
+  const regex = /(".*?"|[^",]+)(?=\s*,|\s*$)/g;
+  const values = [];
+  let match;
+  while ((match = regex.exec(line)) !== null) {
+    const raw = match[0]
+      .replace(/^"/, "")
+      .replace(/"$/, "")
+      .replace(/""/g, '"');
+    values.push(raw);
+  }
+  return values;
+}
+
+function importCSV(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    const text = reader.result;
+    const lines = text.split(/\r?\n/).filter((l) => l.trim() !== "");
+    if (!lines.length) {
+      alert("El archivo CSV está vacío.");
+      return;
+    }
+
+    const headers = parseCsvLine(lines[0]);
+    const actividades = lines.slice(1).map((line) => {
+      const values = parseCsvLine(line);
+      const obj = {};
+      headers.forEach((h, i) => {
+        obj[h] = values[i] ?? "";
+      });
+      return obj;
+    });
+
+    localStorage.setItem("hd_actividades", JSON.stringify(actividades));
+    alert("Actividades importadas correctamente.");
+    location.reload();
+  };
+
+  reader.readAsText(file, "utf-8");
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const btnExport = document.getElementById("btnExportCsv");
+  const importSection = document.getElementById("importSection");
+  const btnImport = document.getElementById("btnImportCsv");
+  const fileImport = document.getElementById("fileImportCsv");
+
+  // Mostrar sección de importar SOLO si es admin
+  if (window.hdIsAdmin && importSection) {
+    importSection.style.display = "flex";
+  }
+
+  if (btnExport) {
+    btnExport.addEventListener("click", exportActividadesCSV);
+  }
+
+  if (btnImport && fileImport) {
+    btnImport.addEventListener("click", () => {
+      const file = fileImport.files[0];
+      if (!file) {
+        alert("Primero selecciona un archivo CSV.");
+        return;
+      }
+      if (!window.hdIsAdmin) {
+        alert("Solo un administrador puede importar actividades.");
+        return;
+      }
+      importCSV(file);
+    });
+  }
+});

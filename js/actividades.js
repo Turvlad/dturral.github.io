@@ -85,6 +85,47 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("No hay actividades para exportar.");
       return;
     }
+  function parseCsvLine(line) {
+      // Soporta comas dentro de comillas
+      const regex = /(".*?"|[^",]+)(?=\s*,|\s*$)/g;
+      const values = [];
+      let match;
+      while ((match = regex.exec(line)) !== null) {
+        let raw = match[0];
+        raw = raw.replace(/^"/, "").replace(/"$/, "").replace(/""/g, '"');
+        values.push(raw);
+      }
+      return values;
+    }
+  
+    function importCSV(file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const text = reader.result;
+        const lines = text.split(/\r?\n/).filter((l) => l.trim() !== "");
+        if (!lines.length) {
+          alert("El archivo CSV está vacío.");
+          return;
+        }
+  
+        const headers = parseCsvLine(lines[0]);
+        const actividades = lines.slice(1).map((line) => {
+          const values = parseCsvLine(line);
+          const obj = {};
+          headers.forEach((h, i) => {
+            obj[h] = values[i] ?? "";
+          });
+          return obj;
+        });
+  
+        localStorage.setItem(STORAGE_KEY_ACTIVIDADES, JSON.stringify(actividades));
+        alert("Actividades importadas correctamente.");
+        refresh(); // vuelve a dibujar la tabla con lo importado
+      };
+  
+      reader.readAsText(file, "utf-8");
+    }
+    
 
     const csvContent = buildCsvFromActivities(actividades);
 
@@ -95,9 +136,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const boundary = "----=_HelpDesk_" + Date.now();
 
-    let eml = "";
+let eml = "";
     eml += "To: " + to + "\r\n";
     eml += "Subject: " + subject + "\r\n";
+    eml += "X-Unsent: 1\r\n"; // ⚡ clave para tratarlo como borrador
     eml += "MIME-Version: 1.0\r\n";
     eml +=
       'Content-Type: multipart/mixed; boundary="' + boundary + '"\r\n';
@@ -372,6 +414,30 @@ document.addEventListener("DOMContentLoaded", () => {
     btnExport.addEventListener("click", downloadEmlDraft);
   }
 
+  // Wire del botón para descargar borrador de correo (.eml)
+  const btnExport = document.getElementById("btnExportCsv");
+  if (btnExport) {
+    btnExport.addEventListener("click", downloadEmlDraft);
+  }
+
+  // Importar CSV (solo admin)
+  const btnImport = document.getElementById("btnImportCsv");
+  const fileImport = document.getElementById("fileImportCsv");
+  if (btnImport && fileImport) {
+    btnImport.addEventListener("click", () => {
+      const file = fileImport.files[0];
+      if (!file) {
+        alert("Selecciona un archivo CSV primero.");
+        return;
+      }
+      if (!isAdmin) {
+        alert("Solo un administrador puede importar actividades.");
+        return;
+      }
+      importCSV(file);
+    });
+  }
+
   // Mostrar sección importar solo para admin
   const importSection = document.getElementById("importSection");
   if (isAdmin && importSection) {
@@ -381,3 +447,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Primera carga
   refresh();
 });
+  // Mostrar sección importar solo para admin
+  const importSection = document.getElementById("importSection");
+  if (isAdmin && importSection) {
+    importSection.style.display = "flex";
+  }
+
+  // Primera carga
+  refresh();
+});
+

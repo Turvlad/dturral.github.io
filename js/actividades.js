@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const isAdmin = window.hdIsAdmin === true;
   const currentUser = window.hdCurrentUser || null;
 
+  // -------- Helpers de datos --------
   function loadStoredActivities() {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEY_ACTIVIDADES) || "[]");
@@ -54,6 +55,85 @@ document.addEventListener("DOMContentLoaded", () => {
       return '<span class="badge bg-secondary">Pendiente</span>';
     }
     return `<span class="badge bg-secondary">${estatus || "—"}</span>`;
+  }
+
+  function buildCsvFromActivities(actividades) {
+    if (!actividades.length) return "";
+
+    const headers = Object.keys(actividades[0]);
+    const escape = (val) =>
+      `"${(val ?? "").toString().replace(/"/g, '""')}"`;
+
+    const lines = [];
+    lines.push(headers.join(","));
+    actividades.forEach((a) => {
+      const row = headers.map((h) => escape(a[h]));
+      lines.push(row.join(","));
+    });
+
+    return lines.join("\r\n");
+  }
+
+  // helper para base64 UTF-8
+  function toBase64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+
+  function downloadEmlDraft() {
+    const actividades = loadStoredActivities();
+    if (!actividades.length) {
+      alert("No hay actividades para exportar.");
+      return;
+    }
+
+    const csvContent = buildCsvFromActivities(actividades);
+
+    const to = localStorage.getItem("hdUserEmail") || "destino@ejemplo.com";
+    const subject = "Actividades Help Desk";
+    const bodyText =
+      "Hola,\r\n\r\nTe comparto el CSV con las actividades.\r\n\r\nSaludos.\r\n";
+
+    const boundary = "----=_HelpDesk_" + Date.now();
+
+    let eml = "";
+    eml += "To: " + to + "\r\n";
+    eml += "Subject: " + subject + "\r\n";
+    eml += "MIME-Version: 1.0\r\n";
+    eml +=
+      'Content-Type: multipart/mixed; boundary="' + boundary + '"\r\n';
+    eml += "\r\n";
+    eml += "This is a multi-part message in MIME format.\r\n";
+
+    // Parte 1: texto
+    eml += "\r\n--" + boundary + "\r\n";
+    eml += 'Content-Type: text/plain; charset="UTF-8"\r\n';
+    eml += "Content-Transfer-Encoding: 7bit\r\n\r\n";
+    eml += bodyText + "\r\n";
+
+    // Parte 2: adjunto CSV
+    eml += "\r\n--" + boundary + "\r\n";
+    eml += 'Content-Type: text/csv; name="actividades.csv"\r\n';
+    eml += 'Content-Disposition: attachment; filename="actividades.csv"\r\n';
+    eml += "Content-Transfer-Encoding: base64\r\n\r\n";
+
+    const base64Csv = toBase64(csvContent).replace(/(.{76})/g, "$1\r\n");
+    eml += base64Csv + "\r\n";
+
+    // cierre del boundary
+    eml += "\r\n--" + boundary + "--\r\n";
+
+    const blob = new Blob([eml], {
+      type: "message/rfc822",
+    });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "borrador_actividades.eml";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 
   // --- DOM refs ---
@@ -286,107 +366,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Primera carga
-  refresh();
-});
-function loadStoredActivities() {
-  try {
-    return JSON.parse(localStorage.getItem("hd_actividades") || "[]");
-  } catch (e) {
-    console.error("No se pudo leer hd_actividades", e);
-    return [];
-  }
-}
-
-function buildCsvFromActivities(actividades) {
-  if (!actividades.length) return "";
-
-  const headers = Object.keys(actividades[0]);
-  const escape = (val) =>
-    `"${(val ?? "").toString().replace(/"/g, '""')}"`;
-
-  const lines = [];
-  lines.push(headers.join(","));
-  actividades.forEach((a) => {
-    const row = headers.map((h) => escape(a[h]));
-    lines.push(row.join(","));
-  });
-
-  return lines.join("\r\n");
-}
-
-// helper para base64 UTF-8
-function toBase64(str) {
-  return btoa(unescape(encodeURIComponent(str)));
-}
-
-function downloadEmlDraft() {
-  const actividades = loadStoredActivities();
-  if (!actividades.length) {
-    alert("No hay actividades para exportar.");
-    return;
-  }
-
-  const csvContent = buildCsvFromActivities(actividades);
-
-  const to = localStorage.getItem("hdUserEmail") || "destino@ejemplo.com";
-  const subject = "Actividades Help Desk";
-  const bodyText =
-    "Hola,\r\n\r\nTe comparto el CSV con las actividades.\r\n\r\nSaludos.\r\n";
-
-  const boundary = "----=_HelpDesk_" + Date.now();
-
-  let eml = "";
-  eml += "To: " + to + "\r\n";
-  eml += "Subject: " + subject + "\r\n";
-  eml += "MIME-Version: 1.0\r\n";
-  eml +=
-    'Content-Type: multipart/mixed; boundary="' + boundary + '"\r\n';
-  eml += "\r\n";
-  eml += "This is a multi-part message in MIME format.\r\n";
-
-  // Parte 1: texto
-  eml += "\r\n--" + boundary + "\r\n";
-  eml += 'Content-Type: text/plain; charset="UTF-8"\r\n';
-  eml += "Content-Transfer-Encoding: 7bit\r\n\r\n";
-  eml += bodyText + "\r\n";
-
-  // Parte 2: adjunto CSV
-  eml += "\r\n--" + boundary + "\r\n";
-  eml +=
-    'Content-Type: text/csv; name="actividades.csv"\r\n';
-  eml += 'Content-Disposition: attachment; filename="actividades.csv"\r\n';
-  eml += "Content-Transfer-Encoding: base64\r\n\r\n";
-
-  const base64Csv = toBase64(csvContent).replace(/(.{76})/g, "$1\r\n");
-  eml += base64Csv + "\r\n";
-
-  // cierre del boundary
-  eml += "\r\n--" + boundary + "--\r\n";
-
-  const blob = new Blob([eml], {
-    type: "message/rfc822",
-  });
-
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "borrador_actividades.eml";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-document.addEventListener("DOMContentLoaded", () => {
+  // Wire del botón para descargar borrador de correo (.eml)
   const btnExport = document.getElementById("btnExportCsv");
   if (btnExport) {
-    // antes seguro tenías exportActividadesCSV o sendCsvViaMailto aquí
     btnExport.addEventListener("click", downloadEmlDraft);
   }
 
+  // Mostrar sección importar solo para admin
   const importSection = document.getElementById("importSection");
-  if (window.hdIsAdmin && importSection) {
+  if (isAdmin && importSection) {
     importSection.style.display = "flex";
   }
+
+  // Primera carga
+  refresh();
 });

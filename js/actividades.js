@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return `<span class="badge bg-secondary">${estatus || "—"}</span>`;
   }
 
+  // ---- CSV helpers ----
   function buildCsvFromActivities(actividades) {
     if (!actividades.length) return "";
 
@@ -85,47 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("No hay actividades para exportar.");
       return;
     }
-  function parseCsvLine(line) {
-      // Soporta comas dentro de comillas
-      const regex = /(".*?"|[^",]+)(?=\s*,|\s*$)/g;
-      const values = [];
-      let match;
-      while ((match = regex.exec(line)) !== null) {
-        let raw = match[0];
-        raw = raw.replace(/^"/, "").replace(/"$/, "").replace(/""/g, '"');
-        values.push(raw);
-      }
-      return values;
-    }
-  
-    function importCSV(file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const text = reader.result;
-        const lines = text.split(/\r?\n/).filter((l) => l.trim() !== "");
-        if (!lines.length) {
-          alert("El archivo CSV está vacío.");
-          return;
-        }
-  
-        const headers = parseCsvLine(lines[0]);
-        const actividades = lines.slice(1).map((line) => {
-          const values = parseCsvLine(line);
-          const obj = {};
-          headers.forEach((h, i) => {
-            obj[h] = values[i] ?? "";
-          });
-          return obj;
-        });
-  
-        localStorage.setItem(STORAGE_KEY_ACTIVIDADES, JSON.stringify(actividades));
-        alert("Actividades importadas correctamente.");
-        refresh(); // vuelve a dibujar la tabla con lo importado
-      };
-  
-      reader.readAsText(file, "utf-8");
-    }
-    
 
     const csvContent = buildCsvFromActivities(actividades);
 
@@ -136,10 +96,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const boundary = "----=_HelpDesk_" + Date.now();
 
-let eml = "";
+    let eml = "";
     eml += "To: " + to + "\r\n";
     eml += "Subject: " + subject + "\r\n";
-    eml += "X-Unsent: 1\r\n"; // ⚡ clave para tratarlo como borrador
+    eml += "X-Unsent: 1\r\n"; // intenta marcarlo como borrador
     eml += "MIME-Version: 1.0\r\n";
     eml +=
       'Content-Type: multipart/mixed; boundary="' + boundary + '"\r\n';
@@ -178,6 +138,48 @@ let eml = "";
     URL.revokeObjectURL(url);
   }
 
+  // ---- Importar CSV ----
+  function parseCsvLine(line) {
+    // Soporta comas dentro de comillas
+    const regex = /(".*?"|[^",]+)(?=\s*,|\s*$)/g;
+    const values = [];
+    let match;
+    while ((match = regex.exec(line)) !== null) {
+      let raw = match[0];
+      raw = raw.replace(/^"/, "").replace(/"$/, "").replace(/""/g, '"');
+      values.push(raw);
+    }
+    return values;
+  }
+
+  function importCSV(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = reader.result;
+      const lines = text.split(/\r?\n/).filter((l) => l.trim() !== "");
+      if (!lines.length) {
+        alert("El archivo CSV está vacío.");
+        return;
+      }
+
+      const headers = parseCsvLine(lines[0]);
+      const actividades = lines.slice(1).map((line) => {
+        const values = parseCsvLine(line);
+        const obj = {};
+        headers.forEach((h, i) => {
+          obj[h] = values[i] ?? "";
+        });
+        return obj;
+      });
+
+      localStorage.setItem(STORAGE_KEY_ACTIVIDADES, JSON.stringify(actividades));
+      alert("Actividades importadas correctamente.");
+      refresh(); // vuelve a dibujar la tabla con lo importado
+    };
+
+    reader.readAsText(file, "utf-8");
+  }
+
   // --- DOM refs ---
   const tablaBody = document.querySelector("table.table tbody");
   const filtrosForm = document.querySelector(".filter-card form");
@@ -207,7 +209,7 @@ let eml = "";
     }
   }
 
-  // 1) Scope base por usuario (RBAC front)
+  // ---- Scope base por usuario ----
   function applyBaseScope(lista) {
     if (isAdmin || !currentUser) {
       return Array.isArray(lista) ? [...lista] : [];
@@ -231,7 +233,7 @@ let eml = "";
     });
   }
 
-  // 2) Filtros de la UI (se aplican SOBRE el scope base)
+  // ---- Filtros de la UI ----
   function applyFilters(lista) {
     const base = applyBaseScope(lista);
 
@@ -241,7 +243,7 @@ let eml = "";
     const fecha = (inputFecha?.value || "").trim(); // YYYY-MM-DD
 
     return base.filter((a) => {
-      // Colaborador (solo útil realmente en admin, pero se deja por si acaso)
+      // Colaborador
       if (qColab) {
         const nombre = (
           a.colaborador ||
@@ -333,7 +335,6 @@ let eml = "";
       });
     }
 
-    const total = lista.length;
     const filtrados = listaFiltrada.length;
 
     if (headerSubtitle) {
@@ -414,12 +415,6 @@ let eml = "";
     btnExport.addEventListener("click", downloadEmlDraft);
   }
 
-  // Wire del botón para descargar borrador de correo (.eml)
-  const btnExport = document.getElementById("btnExportCsv");
-  if (btnExport) {
-    btnExport.addEventListener("click", downloadEmlDraft);
-  }
-
   // Importar CSV (solo admin)
   const btnImport = document.getElementById("btnImportCsv");
   const fileImport = document.getElementById("fileImportCsv");
@@ -447,13 +442,3 @@ let eml = "";
   // Primera carga
   refresh();
 });
-  // Mostrar sección importar solo para admin
-  const importSection = document.getElementById("importSection");
-  if (isAdmin && importSection) {
-    importSection.style.display = "flex";
-  }
-
-  // Primera carga
-  refresh();
-});
-

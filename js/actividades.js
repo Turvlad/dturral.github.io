@@ -89,8 +89,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const csvContent = buildCsvFromActivities(actividades);
 
-    const to = localStorage.getItem("hdUserEmail") || "destino@ejemplo.com";
-    const subject = "Actividades Help Desk";
+    const to = localStorage.getItem("hdUserEmail") || "metepec46@qualitas.com.mx";
+
+    // 👉 1) Sacar el nombre/usuario de quien tiene la sesión
+    const userLabel =
+      (currentUser?.nombre ||
+        currentUser?.username ||
+        "Usuario").trim();
+  
+    // 👉 2) Formatear la fecha de hoy (YYYY-MM-DD o como te guste)
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const dd = String(now.getDate()).padStart(2, "0");
+    const fechaLabel = `${yyyy}-${mm}-${dd}`; // o `${dd}/${mm}/${yyyy}` si prefieres
+  
+    // 👉 3) Armar el asunto con usuario + fecha
+    const subject = `Actividades Help Desk - ${userLabel} - ${fechaLabel}`;
+  
     const bodyText =
       "Hola,\r\n\r\nTe comparto el CSV con las actividades.\r\n\r\nSaludos.\r\n";
 
@@ -442,3 +458,4 @@ document.addEventListener("DOMContentLoaded", () => {
   // Primera carga
   refresh();
 });
+

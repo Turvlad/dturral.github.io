@@ -83,22 +83,20 @@
           </a>
         </nav>
       </aside>
-
-      <div class="app-main flex-grow-1 d-flex flex-column min-vh-100">
-        <nav class="navbar bg-white px-4" aria-label="Barra superior">
-          <span class="text-secondary small" data-usuario-nombre
-            >Usuario</span
-          >
-          <span class="text-muted small" data-usuario-rol>Rol</span>
-          <img
-            src="https://placeholdmon.vercel.app/"
-            alt="Avatar de Usurio"
-            width="40"
-            height="40"
-            loading="lazy"
-          />
-        </nav>
-
+      <div>
+        <div class="app-main flex-grow-1 d-flex flex-column min-vh-100">
+          <nav class="navbar bg-white px-4" aria-label="Barra superior">
+            <span class="text-secondary small" data-usuario-nombre>Usuario</span>
+            <span class="text-muted small" data-usuario-rol>Rol</span>
+            <img
+              src="https://placeholdmon.vercel.app/"
+              alt="Avatar de Usurio"
+              width="40"
+              height="40"
+              loading="lazy"
+            />
+          </nav>
+        </div>
         <!-- Tabs: Registro general vs Renovaciones -->
         <div class="bg-white border-bottom">
           <div class="container-fluid px-4 py-3">
@@ -351,19 +349,37 @@
                         name="enviado_area"
                       >
                         <option value="" selected disabled>Selecciona</option>
-                        <option value="AOF">AOF</option>		
-                        <option value="Caja Metepec">Caja Metepec	</option>	
-                        <option value="Caja San Jerónimo">Caja San Jerónimo	</option>	
-                        <option value="OTRS Suscripción Individual">OTRS Suscripción Individual	</option>	
-                        <option value="OTRS Valores Convenidos">OTRS Valores Convenidos</option>		
-                        <option value="Plataforma CRM"	>Plataforma CRM</option>	
-                        <option value="Devoluciones (Milka)">	Devoluciones (Milka)</option>	
-                        <option value="Control de agentes">Control de agentes</option>
-                        <option value="Devoluciones OPL">Devoluciones OPL</option>
+                        <option value="AOF">AOF</option>
+                        <option value="Caja Metepec">Caja Metepec</option>
+                        <option value="Caja San Jerónimo">
+                          Caja San Jerónimo
+                        </option>
+                        <option value="OTRS Suscripción Individual">
+                          OTRS Suscripción Individual
+                        </option>
+                        <option value="OTRS Valores Convenidos">
+                          OTRS Valores Convenidos
+                        </option>
+                        <option value="Plataforma CRM">Plataforma CRM</option>
+                        <option value="Devoluciones (Milka)">
+                          Devoluciones (Milka)
+                        </option>
+                        <option value="Control de agentes">
+                          Control de agentes
+                        </option>
+                        <option value="Devoluciones OPL">
+                          Devoluciones OPL
+                        </option>
                         <option value="OTR tarifas">OTR tarifas</option>
-                        <option value="Claudia Vázquez (BP)">Claudia Vázquez (BP)</option>	
-                        <option value="Cuentas Coorporativas (multianuales)">Cuentas Coorporativas (multianuales)</option>
-                        <option value="Suscripción flotillas"	>Suscripción flotillas</option>
+                        <option value="Claudia Vázquez (BP)">
+                          Claudia Vázquez (BP)
+                        </option>
+                        <option value="Cuentas Coorporativas (multianuales)">
+                          Cuentas Coorporativas (multianuales)
+                        </option>
+                        <option value="Suscripción flotillas">
+                          Suscripción flotillas
+                        </option>
                       </select>
                     </div>
 
@@ -536,7 +552,6 @@
                   <div id="resume" class="row g-3 small"><!-- JS --></div>
                 </div>
               </section>
-
             </form>
           </div>
 
@@ -661,8 +676,6 @@
         const editIdParam = urlParams.get("id");
         const usuarioStrGlobal = localStorage.getItem("hd_usuario");
         const esAdmin = window.hdIsAdmin === true;
-
-
 
         const agenteInput = document.getElementById("f-agente");
         const agenteInfo = document.getElementById("agente-info");
@@ -1077,10 +1090,13 @@
               editingActividad.fechaRecepcion ||
               (editingActividad.fechaRegistro || "").slice(0, 10);
             data.hora_recepcion =
-              data.hora_recepcion || editingActividad.horaRecepcion || editingActividad.horaRegistro;
+              data.hora_recepcion ||
+              editingActividad.horaRecepcion ||
+              editingActividad.horaRegistro;
 
             // Envío al área
-            data.enviado_area = data.enviado_area || editingActividad.areaDestino;
+            data.enviado_area =
+              data.enviado_area || editingActividad.areaDestino;
             data.fecha_envio_area =
               data.fecha_envio_area || editingActividad.fechaEnvioArea;
             data.hora_envio_area =
@@ -1121,10 +1137,7 @@
           } else if (data.fecha_resp_area && data.hora_resp_area) {
             dtFinProceso = parseDT(data.fecha_resp_area, data.hora_resp_area);
           } else if (data.fecha_envio_area && data.hora_envio_area) {
-            dtFinProceso = parseDT(
-              data.fecha_envio_area,
-              data.hora_envio_area
-            );
+            dtFinProceso = parseDT(data.fecha_envio_area, data.hora_envio_area);
           }
 
           // Tiempo total del proceso
@@ -1201,7 +1214,8 @@
             usuarioNombre,
             usuarioRol,
 
-            agenteClave: data.agente_clave || editingActividad?.agenteClave || null,
+            agenteClave:
+              data.agente_clave || editingActividad?.agenteClave || null,
             formaSolicitud:
               data.forma_solicitud || editingActividad?.formaSolicitud || null,
             tipoSolicitud:
@@ -1218,7 +1232,8 @@
 
             fechaEnvioAgente: data.fecha_envio_agente || null,
             horaEnvioAgente: data.hora_envio_agente || null,
-            asuntoCorreo: data.asunto_correo || editingActividad?.asuntoCorreo || null,
+            asuntoCorreo:
+              data.asunto_correo || editingActividad?.asuntoCorreo || null,
 
             fechaSeguimiento: data.fecha_seguimiento || null,
             comentarios: data.comentarios || null,
@@ -1273,7 +1288,9 @@
               .includes("final");
 
             // ===== Paso 1 =====
-            const paso1 = document.querySelector('#pane-general section[data-step="1"]');
+            const paso1 = document.querySelector(
+              '#pane-general section[data-step="1"]'
+            );
 
             if (paso1) {
               if (!esAdmin) {
@@ -1392,7 +1409,7 @@
             }
 
             const fd = new FormData(form);
-            
+
             if (editingId != null) {
               const hoy = new Date().toISOString().slice(0, 10);
               fd.set("fecha_seguimiento", hoy);
@@ -1527,7 +1544,7 @@
               form.elements[name].addEventListener("input", computeDurations);
           });
 
-          // Cargar borrador (solo si NO es edición) 
+          // Cargar borrador (solo si NO es edición)
           (function () {
             const draft = JSON.parse(
               localStorage.getItem("helpdesk_draft") || "null"
